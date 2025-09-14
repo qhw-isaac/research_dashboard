@@ -272,6 +272,8 @@ function showObjectDetails(objectName) {
 // Get object details based on name
 function getObjectDetails(objectName) {
     const details = {
+        'readme': `Environment tabs are clickable as well as the top left R tabs. Feed a Cow! game is playable and has sounds!`,
+        
         'mission': `chr "Making dairy cow lives incrementally better over time"<br><br>
 This represents my core motivation and the driving force behind my research. 
 Every study, every analysis, every day spent in the field is guided by this 
