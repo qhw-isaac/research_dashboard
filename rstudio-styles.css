@@ -1,0 +1,956 @@
+/* RStudio-inspired Dashboard Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'JetBrains Mono', monospace;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #2d2d30;
+    z-index: 1000;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #3e3e42;
+}
+
+.nav-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #d4d4d4;
+}
+
+.nav-logo i {
+    margin-right: 8px;
+    color: #e74c3c;
+    font-size: 1.4rem;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #d4d4d4;
+    font-weight: 400;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff;
+    background: #3e3e42;
+}
+
+/* RStudio Container */
+.rstudio-container {
+    margin-top: 60px;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    background: #1e1e1e;
+    overflow: hidden;
+}
+
+/* Menu Bar */
+.menu-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2d2d30;
+    border-bottom: 1px solid #3e3e42;
+    padding: 0 10px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.menu-left {
+    display: flex;
+    gap: 15px;
+}
+
+.menu-item {
+    color: #cccccc;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+.menu-item:hover {
+    background: #3e3e42;
+}
+
+.menu-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.window-title {
+    color: #cccccc;
+    font-size: 12px;
+}
+
+.window-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.control-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.control-btn.close {
+    background: #ff5f56;
+}
+
+.control-btn.minimize {
+    background: #ffbd2e;
+}
+
+.control-btn.maximize {
+    background: #27ca3f;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    align-items: center;
+    background: #2d2d30;
+    border-bottom: 1px solid #3e3e42;
+    padding: 8px 10px;
+    gap: 8px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.tool-btn {
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    padding: 6px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tool-btn:hover {
+    background: #3e3e42;
+}
+
+.tool-separator {
+    width: 1px;
+    height: 20px;
+    background: #3e3e42;
+    margin: 0 5px;
+}
+
+.search-input {
+    background: #3e3e42;
+    border: 1px solid #5a5a5a;
+    color: #d4d4d4;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    width: 200px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007acc;
+}
+
+.addins-dropdown {
+    background: #3e3e42;
+    border: 1px solid #5a5a5a;
+    color: #d4d4d4;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+/* Panes Container */
+.panes-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1px;
+    background: #3e3e42;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Left column container */
+.left-column {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+/* Right column container */
+.right-column {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+/* Resizable handles */
+.resize-handle {
+    position: absolute;
+    background: transparent;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.resize-handle.horizontal {
+    width: 100%;
+    height: 8px;
+    cursor: row-resize;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.resize-handle.horizontal-left {
+    width: 100%;
+    height: 8px;
+    cursor: row-resize;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    position: absolute;
+}
+
+.resize-handle.horizontal-right {
+    width: 100%;
+    height: 8px;
+    cursor: row-resize;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    position: absolute;
+}
+
+.resize-handle.vertical {
+    height: 100%;
+    width: 8px;
+    cursor: col-resize;
+    left: 66.67%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+.panes-container:hover .resize-handle {
+    opacity: 0.3;
+}
+
+.resize-handle:hover {
+    background: #007acc;
+    opacity: 0.6 !important;
+}
+
+/* Pane positioning is now handled by column containers */
+
+/* Pane Styles */
+.pane {
+    background: #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.pane-header {
+    background: #2d2d30;
+    border-bottom: 1px solid #3e3e42;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    height: 30px;
+}
+
+.pane-tabs {
+    display: flex;
+    gap: 2px;
+}
+
+.tab {
+    background: #3e3e42;
+    color: #cccccc;
+    padding: 4px 12px;
+    border-radius: 4px 4px 0 0;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+    background: #1e1e1e;
+    color: #ffffff;
+    border-bottom-color: #007acc;
+}
+
+.tab:hover {
+    background: #4a4a4a;
+}
+
+.tab i.fa-times {
+    margin-left: 5px;
+    opacity: 0.7;
+}
+
+.tab i.fa-times:hover {
+    opacity: 1;
+}
+
+.pane-toolbar {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.pane-btn {
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    padding: 2px 6px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 10px;
+    flex-shrink: 0;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pane-btn:hover {
+    background: #3e3e42;
+}
+
+.run-btn {
+    color: #4caf50;
+}
+
+.pane-content {
+    flex: 1;
+    overflow: auto;
+    padding: 10px;
+    min-height: 0;
+}
+
+/* Source Pane */
+.source-pane {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.code-editor {
+    display: flex;
+    height: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+/* Removed .code-editor.hidden - using inline styles instead */
+
+.line-numbers {
+    background: #252526;
+    color: #858585;
+    padding: 10px 8px;
+    border-right: 1px solid #3e3e42;
+    text-align: right;
+    user-select: none;
+    min-width: 40px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.line-number {
+    display: block;
+    line-height: 1.4;
+}
+
+.code-content {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.code-content.editable {
+    flex: 1;
+    padding: 10px;
+    overflow: auto;
+    overflow-x: hidden;
+    outline: none;
+    cursor: text;
+}
+
+.code-content.editable:focus {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.code-content.editable:empty:before {
+    content: "Click here to edit code...";
+    color: #666;
+    font-style: italic;
+}
+
+.code-line {
+    line-height: 1.4;
+    margin-bottom: 2px;
+}
+
+.keyword {
+    color: #569cd6;
+    font-weight: 500;
+}
+
+.string {
+    color: #ce9178;
+}
+
+.comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.function {
+    color: #dcdcaa;
+}
+
+/* Console Pane */
+.console-pane {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.console-output {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    height: 100%;
+    max-height: 100%;
+}
+
+.console-line {
+    margin-bottom: 2px;
+}
+
+.cursor {
+    animation: blink 1s infinite;
+    color: #ffffff;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Environment Pane */
+.environment-pane {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.environment-content {
+    height: 100%;
+}
+
+.search-bar {
+    margin-bottom: 10px;
+}
+
+.search-bar input {
+    width: 100%;
+    background: #3e3e42;
+    border: 1px solid #5a5a5a;
+    color: #d4d4d4;
+    padding: 6px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #007acc;
+}
+
+.environment-objects {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.object-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    background: #2d2d30;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.object-item:hover {
+    background: #3e3e42;
+}
+
+.object-item i {
+    color: #569cd6;
+    width: 15px;
+    font-size: 11px;
+}
+
+.object-name {
+    color: #ffffff;
+    font-weight: 500;
+    min-width: 113px;
+    font-size: 11px;
+}
+
+.object-type {
+    color: #4ec9b0;
+    font-size: 10px;
+    min-width: 75px;
+}
+
+.object-size {
+    color: #858585;
+    font-size: 10px;
+    margin-left: auto;
+}
+
+/* Game Pane Styles */
+.game-container {
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #1e1e1e;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3e3e42;
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #808080;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 16px;
+    color: #d4d4d4;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.game-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.game-btn {
+    background: #ffdb77;
+    color: #333;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    min-width: 80px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 600;
+}
+
+.game-btn:hover {
+    background: #e0aa2c;
+}
+
+.game-btn:disabled {
+    background: #3e3e42;
+    cursor: not-allowed;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+.cow-hole {
+    background: #2d2d30;
+    border: 2px solid #3e3e42;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cow-hole:hover {
+    border-color: #007acc;
+}
+
+.cow-hole.active {
+    background: #4ec9b0;
+    border-color: #4ec9b0;
+    animation: cowPop 0.3s ease-out;
+}
+
+.cow-hole.active::before {
+    content: "🐄";
+    font-size: 24px;
+    animation: cowBounce 0.3s ease-out;
+}
+
+.cow-hole.fed {
+    background: #4ec9b0;
+    border-color: #4ec9b0;
+    animation: cowFed 0.6s ease-out;
+    box-shadow: 0 0 15px rgba(78, 201, 176, 0.6);
+}
+
+.cow-hole.fed::before {
+    content: "🌾";
+    font-size: 24px;
+    animation: haySuccess 0.6s ease-out;
+}
+
+.game-instructions {
+    text-align: center;
+    color: #808080;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.game-instructions p {
+    margin: 4px 0;
+}
+
+/* Animations */
+@keyframes cowPop {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes cowBounce {
+    0% { transform: translateY(10px); opacity: 0; }
+    50% { transform: translateY(-5px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes cowFed {
+    0% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0px rgba(78, 201, 176, 0);
+    }
+    30% { 
+        transform: scale(1.1); 
+        box-shadow: 0 0 20px rgba(78, 201, 176, 0.8);
+    }
+    60% { 
+        transform: scale(1.05); 
+        box-shadow: 0 0 15px rgba(78, 201, 176, 0.6);
+    }
+    100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 15px rgba(78, 201, 176, 0.6);
+    }
+}
+
+@keyframes haySuccess {
+    0% { 
+        transform: translateY(0px) scale(0.5); 
+        opacity: 0; 
+    }
+    20% { 
+        transform: translateY(-5px) scale(1.2); 
+        opacity: 1; 
+    }
+    40% { 
+        transform: translateY(-10px) scale(1.4); 
+        opacity: 1; 
+    }
+    60% { 
+        transform: translateY(-15px) scale(1.2); 
+        opacity: 1; 
+    }
+    80% { 
+        transform: translateY(-20px) scale(1.0); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: translateY(-25px) scale(0.8); 
+        opacity: 0; 
+    }
+}
+
+/* Plots Pane */
+.plots-pane {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.plots-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.plot-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 20px;
+    min-height: 300px;
+    position: relative;
+}
+
+.plot-container canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.plot-info {
+    background: #2d2d30;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.plot-info h4 {
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.plot-info p {
+    color: #cccccc;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.plot-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+}
+
+.stat-label {
+    color: #858585;
+}
+
+.stat-value {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .panes-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+    
+    .source-pane {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    
+    .console-pane {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    
+    .environment-pane {
+        grid-column: 1;
+        grid-row: 3;
+    }
+    
+    .plots-pane {
+        grid-column: 1;
+        grid-row: 4;
+    }
+    
+    .menu-left {
+        gap: 8px;
+    }
+    
+    .menu-item {
+        font-size: 10px;
+    }
+    
+    .search-input {
+        width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .toolbar {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 40px;
+    }
+    
+    .search-input {
+        width: 120px;
+    }
+    
+    .window-title {
+        display: none;
+    }
+    
+    .menu-left {
+        gap: 5px;
+    }
+    
+    .menu-item {
+        font-size: 9px;
+        padding: 1px 3px;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #2d2d30;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6a6a6a;
+}
+
+/* Animation for pane interactions */
+.pane-content {
+    transition: all 0.3s ease;
+}
+
+.object-item {
+    transition: all 0.2s ease;
+}
+
+.tab {
+    transition: all 0.2s ease;
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s infinite;
+}
