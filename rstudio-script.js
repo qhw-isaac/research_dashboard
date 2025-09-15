@@ -2,6 +2,7 @@
 
 // Initialize Chart.js for cow behavior visualization
 document.addEventListener('DOMContentLoaded', function() {
+    setupMobileWarning();
     initializeChart();
     setupTabSwitching();
     setupObjectInteractions();
@@ -1019,12 +1020,28 @@ function initCowGallery() {
             story: "3034 was the calf that pushed me toward graduate studies in animal welfare. She was born premature and nearly swept away by the manure scraper. I happened to be there to save her, but what stayed with me was the sound of cows calling for help while making sure not to trample her. That moment made me realize how little we truly understand cows, and how much we owe them the effort to try."
         },
         {
+            name: "10",
+            breed: "Water Buffalo",
+            location: "Academy Farms",
+            date: "August 24, 2024",
+            image: "images/10.jpg",
+            story: "Very funny girl from a farm with a great purpose!"
+        },
+        {
             name: "Rocky",
             breed: "Hereford",
             location: "K&M Farms",
             date: "July 19, 2025",
             image: "images/Rocky.jpg",
             story: "Rocky was a 4H steer, particularly one showed by the son of the owner of K&M Farms. He was as gentle as can be; the owner mentioned that he is very unaware of his humongous size, and often make way for people that are walking by."
+        },
+        {
+            name: "And Many More to Come!",
+            breed: "",
+            location: "",
+            date: "",
+            image: "images/future-cows.jpg",
+            story: ""
         }
     ];
 
@@ -1075,6 +1092,54 @@ function initCowGallery() {
         cowDate.textContent = cow.date;
         cowStory.textContent = cow.story;
         currentCowSpan.textContent = currentCowIndex + 1;
+
+        // Special styling for the final "And Many More to Come!" page
+        if (cow.name === "And Many More to Come!") {
+            // Hide everything except the title
+            cowImage.style.display = "none";
+            cowBreed.style.display = "none";
+            cowLocation.style.display = "none";
+            cowDate.style.display = "none";
+            cowStory.style.display = "none";
+            
+            // Style the title to be big, centered, and beautiful
+            cowName.style.color = "#ffdb77";
+            cowName.style.fontSize = "56px";
+            cowName.style.fontWeight = "800";
+            cowName.style.textAlign = "center";
+            cowName.style.width = "100%";
+            cowName.style.position = "absolute";
+            cowName.style.top = "37%";
+            cowName.style.left = "50%";
+            cowName.style.transform = "translate(-50%, -50%)";
+            cowName.style.textShadow = "0 0 20px rgba(255, 219, 119, 0.5)";
+            cowName.style.letterSpacing = "2px";
+            cowName.style.fontFamily = "'Poppins', sans-serif";
+        } else {
+            // Reset to normal styling
+            cowImage.style.display = "block";
+            cowName.style.color = "#ffffff";
+            cowName.style.fontSize = "20px";
+            cowName.style.fontWeight = "600";
+            cowName.style.textAlign = "left";
+            cowName.style.width = "auto";
+            cowName.style.position = "static";
+            cowName.style.top = "auto";
+            cowName.style.left = "auto";
+            cowName.style.transform = "none";
+            cowName.style.textShadow = "none";
+            cowName.style.letterSpacing = "normal";
+            cowName.style.fontFamily = "'JetBrains Mono', monospace";
+            cowBreed.style.display = "block";
+            cowLocation.style.display = "block";
+            cowDate.style.display = "block";
+            cowStory.style.display = "block";
+            cowBreed.style.color = "#d4d4d4";
+            cowLocation.style.color = "#d4d4d4";
+            cowDate.style.color = "#d4d4d4";
+            cowStory.style.fontStyle = "italic";
+            cowStory.style.fontWeight = "400";
+        }
 
         // Update dots
         const dots = galleryDots.querySelectorAll('.gallery-dot');
@@ -1137,6 +1202,39 @@ function initCowGallery() {
 
     // Initialize the gallery
     initGallery();
+}
+
+// Mobile warning functionality
+function setupMobileWarning() {
+    const mobileWarning = document.getElementById('mobile-warning');
+    const continueBtn = document.getElementById('mobile-continue');
+    
+    // Check if user is on mobile
+    function isMobile() {
+        return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    
+    // Show warning on mobile devices
+    if (isMobile()) {
+        mobileWarning.style.display = 'flex';
+    } else {
+        mobileWarning.style.display = 'none';
+    }
+    
+    // Handle continue button click
+    continueBtn.addEventListener('click', function() {
+        mobileWarning.classList.add('hidden');
+        // Allow user to proceed with mobile view
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (!isMobile()) {
+            mobileWarning.style.display = 'none';
+        } else if (!mobileWarning.classList.contains('hidden')) {
+            mobileWarning.style.display = 'flex';
+        }
+    });
 }
 
 console.log('🐄 RStudio Dashboard Loaded! Try clicking on objects in the Environment pane or running code!');

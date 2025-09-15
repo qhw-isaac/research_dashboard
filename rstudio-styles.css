@@ -18,6 +18,80 @@ body {
     box-sizing: border-box;
 }
 
+/* Mobile Warning Styles */
+.mobile-warning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.mobile-warning-content {
+    background: #2d2d30;
+    border: 2px solid #007acc;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    margin: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-warning-content i {
+    font-size: 48px;
+    color: #007acc;
+    margin-bottom: 20px;
+}
+
+.mobile-warning-content h3 {
+    color: #ffffff;
+    font-size: 24px;
+    margin: 0 0 15px 0;
+    font-weight: 600;
+}
+
+.mobile-warning-content p {
+    color: #d4d4d4;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 25px 0;
+}
+
+.mobile-continue-btn {
+    background: #007acc;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.mobile-continue-btn:hover {
+    background: #005a9e;
+}
+
+.mobile-warning.hidden {
+    display: none;
+}
+
+/* Hide mobile warning on desktop */
+@media (min-width: 768px) {
+    .mobile-warning {
+        display: none !important;
+    }
+}
+
 /* Navigation */
 .navbar {
     position: fixed;
