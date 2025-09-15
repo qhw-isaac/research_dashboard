@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupCodeEditing();
     setupResizablePanes();
     initFeedACowGame();
+    initCowGallery();
 });
 
 // Chart.js visualization for AMS x PRT research data
@@ -109,9 +110,15 @@ function setupTabSwitching() {
     console.log('Found code editors:', codeEditors.length);
     console.log('Found game container:', gameContainer);
     
-    // Ensure game container is visible by default
+    // Ensure cow gallery is visible by default
+    const cowGalleryContainer = document.getElementById('cow-gallery-container');
+    if (cowGalleryContainer) {
+        cowGalleryContainer.style.display = 'flex';
+    }
+    
+    // Hide game container by default
     if (gameContainer) {
-        gameContainer.style.display = 'flex';
+        gameContainer.style.display = 'none';
     }
     
     // Ensure all code editors are hidden initially
@@ -134,20 +141,38 @@ function setupTabSwitching() {
             // Add active class to clicked tab
             this.classList.add('active');
             
-            // Handle game tab vs code editor tabs
-            if (tabId === 'feed-a-cow') {
-                // Show game, hide all code editors
+            // Handle different tab types
+            if (tabId === 'cow-gallery') {
+                // Show cow gallery, hide everything else
+                if (cowGalleryContainer) {
+                    cowGalleryContainer.style.display = 'flex';
+                }
+                if (gameContainer) {
+                    gameContainer.style.display = 'none';
+                }
+                codeEditors.forEach(editor => {
+                    editor.style.display = 'none';
+                });
+                console.log('Showing cow gallery');
+            } else if (tabId === 'feed-a-cow') {
+                // Show game, hide all code editors and gallery
                 if (gameContainer) {
                     gameContainer.style.display = 'flex';
+                }
+                if (cowGalleryContainer) {
+                    cowGalleryContainer.style.display = 'none';
                 }
                 codeEditors.forEach(editor => {
                     editor.style.display = 'none';
                 });
                 console.log('Showing game');
             } else {
-                // Show code editor, hide game
+                // Show code editor, hide game and gallery
                 if (gameContainer) {
                     gameContainer.style.display = 'none';
+                }
+                if (cowGalleryContainer) {
+                    cowGalleryContainer.style.display = 'none';
                 }
                 
                 // Hide all code editors first
@@ -981,6 +1006,140 @@ function initFeedACowGame() {
     }
 }
 
+// Cow Gallery functionality
+function initCowGallery() {
+    // Cow data - showcasing cows Isaac has met during research
+    const cowData = [
+        {
+            name: "3034",
+            breed: "Holstein",
+            location: "UBC Dairy Education and Research Centre",
+            date: "June 30, 2023",
+            image: "images/3034.jpg",
+            story: "3034 was the calf that pushed me toward graduate studies in animal welfare. She was born premature and nearly swept away by the manure scraper. I happened to be there to save her, but what stayed with me was the sound of cows calling for help while making sure not to trample her. That moment made me realize how little we truly understand cows, and how much we owe them the effort to try."
+        },
+        {
+            name: "Rocky",
+            breed: "Hereford",
+            location: "K&M Farms",
+            date: "July 19, 2025",
+            image: "images/Rocky.jpg",
+            story: "Rocky was a 4H steer, particularly one showed by the son of the owner of K&M Farms. He was as gentle as can be; the owner mentioned that he is very unaware of his humongous size, and often make way for people that are walking by."
+        }
+    ];
+
+    let currentCowIndex = 0;
+    const totalCows = cowData.length;
+
+    // Get DOM elements
+    const cowImage = document.getElementById('cow-image');
+    const cowName = document.getElementById('cow-name');
+    const cowBreed = document.getElementById('cow-breed');
+    const cowLocation = document.getElementById('cow-location');
+    const cowDate = document.getElementById('cow-date');
+    const cowStory = document.getElementById('cow-story');
+    const currentCowSpan = document.getElementById('current-cow');
+    const totalCowsSpan = document.getElementById('total-cows');
+    const prevBtn = document.getElementById('prev-cow');
+    const nextBtn = document.getElementById('next-cow');
+    const galleryDots = document.getElementById('gallery-dots');
+
+    // Initialize gallery
+    function initGallery() {
+        totalCowsSpan.textContent = totalCows;
+        createDots();
+        updateCowDisplay();
+        updateNavigationButtons();
+    }
+
+    // Create navigation dots
+    function createDots() {
+        galleryDots.innerHTML = '';
+        for (let i = 0; i < totalCows; i++) {
+            const dot = document.createElement('div');
+            dot.className = `gallery-dot ${i === currentCowIndex ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToCow(i));
+            galleryDots.appendChild(dot);
+        }
+    }
+
+    // Update cow display
+    function updateCowDisplay() {
+        const cow = cowData[currentCowIndex];
+        
+        cowImage.src = cow.image;
+        cowImage.alt = cow.name;
+        cowName.textContent = cow.name;
+        cowBreed.textContent = cow.breed;
+        cowLocation.textContent = cow.location;
+        cowDate.textContent = cow.date;
+        cowStory.textContent = cow.story;
+        currentCowSpan.textContent = currentCowIndex + 1;
+
+        // Update dots
+        const dots = galleryDots.querySelectorAll('.gallery-dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentCowIndex);
+        });
+    }
+
+    // Update navigation buttons
+    function updateNavigationButtons() {
+        prevBtn.disabled = currentCowIndex === 0;
+        nextBtn.disabled = currentCowIndex === totalCows - 1;
+    }
+
+    // Go to specific cow
+    function goToCow(index) {
+        if (index >= 0 && index < totalCows) {
+            currentCowIndex = index;
+            updateCowDisplay();
+            updateNavigationButtons();
+        }
+    }
+
+    // Previous cow
+    function prevCow() {
+        if (currentCowIndex > 0) {
+            currentCowIndex--;
+            updateCowDisplay();
+            updateNavigationButtons();
+        }
+    }
+
+    // Next cow
+    function nextCow() {
+        if (currentCowIndex < totalCows - 1) {
+            currentCowIndex++;
+            updateCowDisplay();
+            updateNavigationButtons();
+        }
+    }
+
+    // Event listeners
+    prevBtn.addEventListener('click', prevCow);
+    nextBtn.addEventListener('click', nextCow);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        // Only handle if cow gallery is visible
+        const galleryContainer = document.getElementById('cow-gallery-container');
+        if (galleryContainer && galleryContainer.style.display !== 'none') {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevCow();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                nextCow();
+            }
+        }
+    });
+
+    // Initialize the gallery
+    initGallery();
+}
+
 console.log('🐄 RStudio Dashboard Loaded! Try clicking on objects in the Environment pane or running code!');
 console.log('💡 Tip: Type resetLayout() in the console to reset the layout to defaults');
 console.log('🎮 New: Play "Feed a Cow" in the top-left pane!');
+console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
