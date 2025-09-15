@@ -16,7 +16,6 @@
             <i class="fas fa-mobile-alt"></i>
             <h3>Mobile View Not Optimized</h3>
             <p>This research dashboard is designed for desktop viewing. For the best experience, please access it on a computer or tablet.</p>
-            <button id="mobile-continue" class="mobile-continue-btn">Continue Anyway</button>
         </div>
     </div>
 
@@ -66,40 +65,19 @@
             </div>
         </div>
 
-        <!-- Toolbar -->
-        <div class="toolbar">
-            <button class="tool-btn" title="New File"><i class="fas fa-file"></i></button>
-            <button class="tool-btn" title="Open File"><i class="fas fa-folder-open"></i></button>
-            <button class="tool-btn" title="Save"><i class="fas fa-save"></i></button>
-            <div class="tool-separator"></div>
-            <button class="tool-btn" title="Undo"><i class="fas fa-undo"></i></button>
-            <button class="tool-btn" title="Redo"><i class="fas fa-redo"></i></button>
-            <div class="tool-separator"></div>
-            <button class="tool-btn" title="Run"><i class="fas fa-play"></i></button>
-            <button class="tool-btn" title="Source"><i class="fas fa-code"></i></button>
-            <div class="tool-separator"></div>
-            <input type="text" placeholder="Go to file/function" class="search-input">
-            <div class="tool-separator"></div>
-            <select class="addins-dropdown">
-                <option>Addins</option>
-            </select>
-        </div>
+        <!-- Toolbar (removed to gain space) -->
 
         <!-- Main Panes Container -->
         <div class="panes-container" id="panes-container">
-            <!-- Resize handles -->
-            <div class="resize-handle vertical" id="vertical-handle"></div>
-            
             <!-- Left Column -->
             <div class="left-column" id="left-column">
-                <div class="resize-handle horizontal-left" id="horizontal-left-handle"></div>
                 <!-- Top Left: Cow Petting Game -->
                 <div class="pane game-pane">
                 <div class="pane-header">
                     <div class="pane-tabs">
                         <div class="tab active" data-tab="cow-gallery">
                             <i class="fas fa-images"></i>
-                            <span>Cow Gallery</span>
+                            <span>Cows I've Met</span>
                             <i class="fas fa-times"></i>
                         </div>
                         <div class="tab" data-tab="feed-a-cow">
@@ -304,7 +282,7 @@
                             <div class="code-line"><span class="keyword">library</span>(<span class="string">"emmeans"</span>)</div>
                             <div class="code-line"></div>
                             <div class="code-line"><span class="comment"># Load weekly aggregated data</span></div>
-                            <div class="code-line">pen2_weekly <- daily_means %>%</div>
+                            <div class="code-line">pen2_weekly <- cow_data %>%</div>
                             <div class="code-line">  <span class="keyword">filter</span>(pen == <span class="number">2</span>) %>%</div>
                             <div class="code-line">  <span class="keyword">mutate</span>(</div>
                             <div class="code-line">    week = <span class="keyword">case_when</span>(</div>
@@ -403,30 +381,28 @@
 
             <!-- Right Column -->
             <div class="right-column" id="right-column">
-                <div class="resize-handle horizontal-right" id="horizontal-right-handle"></div>
                 <!-- Top Right: Environment -->
                 <div class="pane environment-pane">
                 <div class="pane-header">
-                    <div class="pane-tabs">
-                        <div class="tab active">Environment</div>
-                        <div class="tab">History</div>
-                        <div class="tab">Connections</div>
-                        <div class="tab">Tutorial</div>
+                    <div class="pane-tabs env-tabs">
+                        <div class="tab active" data-tab="env">Environment</div>
+                        <div class="tab" data-tab="about">About Me</div>
+                        <div class="tab" data-tab="conn">Connections</div>
                     </div>
                     <div class="pane-toolbar">
-                        <button class="pane-btn" title="Import Dataset"><i class="fas fa-upload"></i></button>
-                        <span class="memory-info">164 MiB</span>
-                        <select class="list-dropdown">
-                            <option>List</option>
-                        </select>
                         <button class="pane-btn" title="Refresh"><i class="fas fa-sync"></i></button>
                     </div>
                 </div>
                 <div class="pane-content">
-                    <div class="environment-content">
-                        <div class="search-bar">
-                            <input type="text" placeholder="Search objects...">
+                    <div class="environment-content" id="env-pane" data-pane="env">
+                        <div class="environment-objects">
+                            <div class="object-item category" data-category="animal-welfare"><span class="object-name">Animal Welfare</span><span class="object-type">category</span><span class="object-size">—</span></div>
+                            <div class="object-item category" data-category="economics"><span class="object-name">Economics</span><span class="object-type">category</span><span class="object-size">—</span></div>
+                            <div class="object-item category" data-category="leadership"><span class="object-name">Leadership</span><span class="object-type">category</span><span class="object-size">—</span></div>
+                            <div class="object-item category" data-category="dog-grooming"><span class="object-name">Dog Grooming</span><span class="object-type">category</span><span class="object-size">—</span></div>
                         </div>
+                    </div>
+                    <div class="environment-content" id="about-pane" data-pane="about" style="display:none;">
                         <div class="environment-objects">
                             <div class="object-item">
                                 <span class="object-name">readme</span>
@@ -434,35 +410,25 @@
                                 <span class="object-size">1 × 1</span>
                             </div>
                             <div class="object-item">
-                                <i class="fas fa-heart"></i>
                                 <span class="object-name">mission</span>
                                 <span class="object-type">character</span>
                                 <span class="object-size">1 × 1</span>
                             </div>
                             <div class="object-item">
-                                <i class="fas fa-graduation-cap"></i>
                                 <span class="object-name">field_of_study</span>
                                 <span class="object-type">character</span>
                                 <span class="object-size">1 × 1</span>
                             </div>
                             <div class="object-item">
-                                <i class="fas fa-map-marker-alt"></i>
                                 <span class="object-name">current_status</span>
                                 <span class="object-type">character</span>
                                 <span class="object-size">1 × 1</span>
                             </div>
-                            <div class="object-item">
-                                <i class="fas fa-database"></i>
-                                <span class="object-name">daily_means</span>
-                                <span class="object-type">data.frame</span>
-                                <span class="object-size">1,247 × 8</span>
-                            </div>
-                            <div class="object-item">
-                                <i class="fas fa-exchange-alt"></i>
-                                <span class="object-name">regrouped_cows</span>
-                                <span class="object-type">data.frame</span>
-                                <span class="object-size">12 × 2</span>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="environment-content" id="conn-pane" data-pane="conn" style="display:none;">
+                        <div class="environment-objects">
+                            <div class="object-item"><span class="object-name">No active connections</span><span class="object-type">-</span><span class="object-size">-</span></div>
                         </div>
                     </div>
                 </div>
@@ -478,15 +444,7 @@
                         <div class="tab">Help</div>
                         <div class="tab">Viewer</div>
                     </div>
-                    <div class="pane-toolbar">
-                        <button class="pane-btn" title="Previous"><i class="fas fa-chevron-left"></i></button>
-                        <button class="pane-btn" title="Next"><i class="fas fa-chevron-right"></i></button>
-                        <button class="pane-btn" title="Zoom"><i class="fas fa-search-plus"></i></button>
-                        <select class="export-dropdown">
-                            <option>Export</option>
-                        </select>
-                        <button class="pane-btn" title="Refresh"><i class="fas fa-sync"></i></button>
-                    </div>
+                    <div class="pane-toolbar"></div>
                 </div>
                 <div class="pane-content">
                     <div class="plots-content">

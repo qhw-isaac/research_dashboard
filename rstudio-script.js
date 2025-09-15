@@ -1,39 +1,492 @@
+// ================================================
 // RStudio Dashboard Interactive Features
+// ================================================
 
-// Initialize Chart.js for cow behavior visualization
+// ================================================
+// 📝 CONTENT CONFIGURATION - EDIT THESE SECTIONS
+// ================================================
+
+// 🐄 COW GALLERY DATA - Add/edit your cows here
+const COW_DATA = [
+    {
+        name: "3034",
+        breed: "Holstein",
+        location: "UBC Dairy Education and Research Centre",
+        date: "June 30, 2023",
+        image: "images/3034.jpg",
+        story: "3034 was the calf that pushed me toward graduate studies in animal welfare. She was born premature and nearly swept away by the manure scraper. I happened to be there to save her, but what stayed with me was the sound of cows calling for help while making sure not to trample her. That moment made me realize how little we truly understand cows, and how much we owe them the effort to try."
+    },
+    {
+        name: "10",
+        breed: "Water Buffalo",
+        location: "Academy Farms",
+        date: "August 24, 2024",
+        image: "images/10.jpg",
+        story: "Very funny girl from a farm with a great purpose!"
+    },
+    {
+        name: "Rocky",
+        breed: "Hereford",
+        location: "K&M Farms",
+        date: "July 19, 2025",
+        image: "images/Rocky.jpg",
+        story: "Rocky was a 4H steer, particularly one showed by the son of the owner of K&M Farms. He was as gentle as can be; the owner mentioned that he is very unaware of his humongous size, and often make way for people that are walking by."
+    }
+];
+
+// 🔬 RESEARCH CHART DATA - Customize your chart
+const CHART_CONFIG = {
+    title: 'AMS Visit Intervals: Control vs PRT',
+    weeks: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+    controlData: [630, 627, 600, 578],
+    treatmentData: [650, 635, 610, 568],
+    yAxisTitle: 'Daily Max Visit Interval (Min)',
+    xAxisTitle: 'Week(s) After AMS Transition'
+};
+
+// 💬 CONSOLE MESSAGES - Edit welcome messages
+const CONSOLE_MESSAGES = {
+    welcome: [
+        '> Hello.',
+        '> Welcome to my research dashboard.',
+        '> I wonder if we can train cows to udder-stand robots?',
+        '> 181 cows enrolled...'
+    ],
+    execution: [
+        '> source("cow_welfare_analysis.R")',
+        'Loading required package: ggplot2',
+        'Loading required package: dplyr',
+        'Loading required package: lme4',
+        'Loading required package: lmerTest',
+        'Loading required package: MuMIn',
+        '> Cows walking towards the robot... 🐄🤖',
+        '> Analyzing visit intervals... ⏰',
+        '> PRT training showing positive results! 🌾',
+        '> Mixed effects model running... 📊',
+        '> Treatment group adapting faster! ⚡',
+        '> Model diagnostics complete! ✅',
+        'Analysis complete! Check the Plots tab for visualization.'
+    ]
+};
+
+// 📋 OBJECT DETAILS - Environment pane object descriptions
+const OBJECT_DETAILS = {
+    'readme': `Environment tabs are clickable as well as the top left R tabs. Feed a Cow! game is playable and has sounds!`,
+    'mission': `chr "Making dairy cow lives incrementally better over time"<br><br>
+This represents my core motivation and the driving force behind my research. 
+Every study, every analysis, every day spent in the field is guided by this 
+simple goal: improving the welfare and quality of life for dairy cattle.`,
+    'field_of_study': `chr "Master of Food and Resource Economics at the University of British Columbia"`,
+    'current_status': `chr "At the first Vancouver community Cursor Workshop!"`,
+    'Animal Welfare': `Switching to Animal Welfare...`,
+    'Economics': `Switching to Economics...`,
+    'Leadership': `Switching to Leadership...`,
+    'Dog Grooming': `Switching to Dog Grooming...`
+};
+
+// 🏢 WORKSPACE CONTENT - Edit content for different workspace modes
+const WORKSPACE_CONTENT = {
+    economics: {
+        title: "Now showing Economics information",
+        description: "Market signals, price elasticity, and resource allocation meet the barn. This is a playful placeholder to explore how economics intersects with animal agriculture.",
+        tabs: [
+            { id: "econ-overview", icon: "fas fa-chart-line", name: "Econ Overview", content: "" },
+            { id: "macro-trends", icon: "fas fa-globe", name: "macro_trends.R", content: "# macro_trends.R\nsummary(cows)\nplot(week, price_index)" },
+            { id: "micro-pricing", icon: "fas fa-tags", name: "micro_pricing.R", content: "# micro_pricing.R\nprice <- supply_demand_intersect()\nprint(price)" }
+        ]
+    },
+    leadership: {
+        title: "Leadership in Animal Welfare",
+        description: "Leading initiatives for positive change in animal care and advocacy.",
+        tabs: [
+            { id: "paw", icon: "", name: "PAW", content: "Coming soon..." },
+            { id: "ubc-quadball", icon: "", name: "UBC TSC Quadball", content: "Coming soon..." },
+            { id: "lfs-gss", icon: "", name: "LFS GSS", content: "Coming soon..." }
+        ]
+    },
+    dogGrooming: {
+        title: "My Dog Grooming Portfolio",
+        description: "Showcasing skills in canine care and styling. A passion project!",
+        tabs: [
+            { id: "portfolio", icon: "", name: "Portfolio", content: "Portfolio coming soon..." }
+        ]
+    }
+};
+
+// 📞 CONTACT INFO - Update your contact details
+const CONTACT_INFO = {
+    linkedin: "https://www.linkedin.com/in/isaacqi",
+    email: "isaac.qi@ubc.ca"
+};
+
+// 🎮 GAME SETTINGS - Adjust game difficulty
+const GAME_CONFIG = {
+    timeLimit: 30,
+    cowSpeed: 2000,      // milliseconds between cow appearances
+    cowDuration: 2500,   // how long cows stay visible
+    pointsPerCow: 10
+};
+
+// ================================================
+// 🚀 INITIALIZATION
+// ================================================
+
 document.addEventListener('DOMContentLoaded', function() {
-    setupMobileWarning();
+    console.log('🚀 Starting dashboard initialization...');
+    try {
+        setupMobileWarning();
     initializeChart();
     setupTabSwitching();
     setupObjectInteractions();
     setupConsoleSimulation();
     setupRunButton();
     setupCodeEditing();
-    setupResizablePanes();
+        setupLightweightAffordances();
+        setupEnvironmentTabs();
+        setupEnvCategoryClicks();
     initFeedACowGame();
-    initCowGallery();
+        initCowGallery();
+        console.log('🎉 Dashboard initialization complete!');
+    } catch (error) {
+        console.error('❌ Error during initialization:', error);
+    }
 });
 
-// Chart.js visualization for AMS x PRT research data
+// ================================================
+// 🎨 ENVIRONMENT TABS & WORKSPACE SWITCHING
+// ================================================
+
+let originalTopPaneHTML = null;
+
+function setupEnvironmentTabs() {
+    const tabsContainer = document.querySelector('.env-tabs');
+    if (!tabsContainer) return;
+    
+    const panes = {
+        env: document.getElementById('env-pane'),
+        about: document.getElementById('about-pane'),
+        conn: document.getElementById('conn-pane')
+    };
+
+    tabsContainer.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const key = tab.getAttribute('data-tab');
+            
+            // Activate tab
+            tabsContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Show pane
+            Object.keys(panes).forEach(k => {
+                if (panes[k]) panes[k].style.display = (k === key) ? 'block' : 'none';
+            });
+
+            if (key === 'env') {
+                setupEnvCategoryClicks();
+            }
+        });
+    });
+
+    setupConnectionsPane(panes.conn);
+}
+
+function setupConnectionsPane(connPane) {
+    if (!connPane || connPane.dataset.enhanced) return;
+    
+    connPane.dataset.enhanced = 'true';
+    let list = connPane.querySelector('.environment-objects');
+    if (!list) {
+        list = document.createElement('div');
+        list.className = 'environment-objects';
+        connPane.appendChild(list);
+    }
+
+    // Remove placeholder content
+    Array.from(list.children).forEach(child => {
+        const name = child.querySelector('.object-name');
+        if (name && name.textContent.toLowerCase().includes('no active connections')) {
+            child.remove();
+        }
+    });
+
+    // Add contact items
+    const linkedinItem = createContactItem('LinkedIn', 'link', '—', 
+        () => printToConsole(`LinkedIn: ${CONTACT_INFO.linkedin}`));
+    const emailItem = createContactItem('Email', 'contact', '—', 
+        () => printToConsole(`Email: ${CONTACT_INFO.email}`));
+
+    list.appendChild(linkedinItem);
+    list.appendChild(emailItem);
+}
+
+function createContactItem(displayName, typeText, sizeText, onClick) {
+    const row = document.createElement('div');
+    row.className = 'object-item';
+    
+    const name = document.createElement('span');
+    name.className = 'object-name';
+    name.textContent = displayName;
+    
+    const type = document.createElement('span');
+    type.className = 'object-type';
+    type.textContent = typeText;
+    
+    const size = document.createElement('span');
+    size.className = 'object-size';
+    size.textContent = sizeText;
+    
+    row.appendChild(name);
+    row.appendChild(type);
+    row.appendChild(size);
+    row.addEventListener('click', onClick);
+    
+    return row;
+}
+
+function setupEnvCategoryClicks() {
+    const categories = document.querySelectorAll('#env-pane .environment-objects .object-item.category');
+    categories.forEach(row => {
+        row.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const key = row.getAttribute('data-category');
+            
+            switch(key) {
+                case 'animal-welfare':
+                    switchLeftWorkspace('default');
+                    break;
+                case 'economics':
+                    switchLeftWorkspace('economics');
+                    break;
+                case 'leadership':
+                    switchLeftWorkspace('leadership');
+                    break;
+                case 'dog-grooming':
+                    switchLeftWorkspace('dog');
+                    break;
+            }
+        });
+    });
+}
+
+function switchLeftWorkspace(mode) {
+    const topPane = document.querySelector('.left-column .game-pane');
+    if (!topPane) return;
+
+    if (mode === 'default') {
+        if (originalTopPaneHTML) {
+            topPane.outerHTML = originalTopPaneHTML;
+            initCowGallery();
+            initFeedACowGame();
+            setupTabSwitching();
+            const galleryTab = document.querySelector('.left-column .tab[data-tab="cow-gallery"]');
+            if (galleryTab) galleryTab.click();
+        }
+        return;
+    }
+
+    if (!originalTopPaneHTML) {
+        originalTopPaneHTML = topPane.outerHTML;
+    }
+
+    const workspace = getWorkspaceHTML(mode);
+    if (workspace) {
+        topPane.outerHTML = workspace;
+        setupTabSwitching();
+        const firstTab = document.querySelector('.left-column .pane-tabs .tab.active');
+        if (firstTab) firstTab.click();
+    }
+}
+
+function getWorkspaceHTML(mode) {
+    const workspaceMap = {
+        'economics': WORKSPACE_CONTENT.economics,
+        'leadership': WORKSPACE_CONTENT.leadership,
+        'dog': WORKSPACE_CONTENT.dogGrooming
+    };
+    
+    const config = workspaceMap[mode];
+    if (!config) return null;
+
+    const tabsHTML = config.tabs.map(tab => 
+        `<div class="tab ${config.tabs[0].id === tab.id ? 'active' : ''}" data-tab="${tab.id}">
+            ${tab.icon ? `<i class="${tab.icon}"></i>` : ''}<span>${tab.name}</span><i class="fas fa-times"></i>
+        </div>`
+    ).join('');
+
+    const contentHTML = config.tabs.map(tab => {
+        const display = config.tabs[0].id === tab.id ? 'flex' : 'none';
+        const content = tab.content || `
+            <div style="text-align:center;max-width:520px;color:#d4d4d4;">
+                <h3 style="color:#ffffff;margin-bottom:10px;">${config.title}</h3>
+                <p>${config.description}</p>
+            </div>`;
+        
+        return `<div id="${tab.id}" class="code-editor" style="display:${display};align-items:center;justify-content:center;">
+            ${tab.content ? `<div class="code-content">${content}</div>` : content}
+        </div>`;
+    }).join('');
+
+    return `
+        <div class="pane game-pane">
+            <div class="pane-header">
+                <div class="pane-tabs">${tabsHTML}</div>
+            </div>
+            <div class="pane-content">${contentHTML}</div>
+        </div>`;
+}
+
+// ================================================
+// 💬 CONSOLE FUNCTIONALITY
+// ================================================
+
+// Track ongoing console animations to prevent conflicts
+let welcomeTimeouts = [];
+let executionTimeouts = [];
+let isWelcomeSequenceActive = false;
+let isExecutionSequenceActive = false;
+
+function clearConsoleAnimations() {
+    // Stop all sequences
+    isWelcomeSequenceActive = false;
+    isExecutionSequenceActive = false;
+    
+    // Clear all pending welcome message timeouts
+    welcomeTimeouts.forEach(timeout => clearTimeout(timeout));
+    welcomeTimeouts = [];
+    
+    // Clear all pending execution message timeouts
+    executionTimeouts.forEach(timeout => clearTimeout(timeout));
+    executionTimeouts = [];
+}
+
+function printToConsole(text) {
+    // Clear any ongoing animations when user interacts
+    clearConsoleAnimations();
+    
+    const consoleOutput = document.querySelector('.console-pane .console-output');
+    if (!consoleOutput) return;
+    
+    const line = document.createElement('div');
+    line.className = 'console-line';
+    
+    // Make URLs clickable
+    const urlMatch = text.match(/https?:\/\/\S+/i);
+    if (urlMatch) {
+        const before = text.slice(0, urlMatch.index);
+        const after = text.slice(urlMatch.index + urlMatch[0].length);
+        
+        if (before) line.appendChild(document.createTextNode(before));
+        
+        const a = document.createElement('a');
+        a.href = urlMatch[0];
+        a.textContent = urlMatch[0];
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.color = '#4ea1ff';
+        a.style.textDecoration = 'underline';
+        line.appendChild(a);
+        
+        if (after) line.appendChild(document.createTextNode(after));
+    } else {
+        line.textContent = text;
+    }
+    
+    consoleOutput.appendChild(line);
+    ensureConsoleCursor();
+}
+
+function ensureConsoleCursor() {
+    const consoleOutput = document.querySelector('.console-output');
+    if (!consoleOutput) return;
+    
+    // Remove any existing cursors first
+    const existingCursors = consoleOutput.querySelectorAll('.cursor');
+    existingCursors.forEach(cursor => cursor.parentElement.remove());
+    
+    // Create single cursor at bottom
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    cursor.textContent = '|';
+    const cursorLine = document.createElement('div');
+    cursorLine.className = 'console-line';
+    cursorLine.appendChild(cursor);
+    consoleOutput.appendChild(cursorLine);
+    
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
+
+function scrollConsoleToBottom() {
+    const consoleOutput = document.querySelector('.console-output');
+    if (consoleOutput) {
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+}
+
+function setupConsoleSimulation() {
+    const consoleOutput = document.querySelector('.console-output');
+    if (!consoleOutput) return;
+    
+    isWelcomeSequenceActive = true;
+    
+    const initialTimeout = setTimeout(() => {
+        if (!isWelcomeSequenceActive) return; // Check if cancelled
+        
+        // Remove any existing cursors
+        const existingCursors = consoleOutput.querySelectorAll('.cursor');
+        existingCursors.forEach(cursor => cursor.parentElement.remove());
+        
+        // Display welcome messages
+        CONSOLE_MESSAGES.welcome.forEach((message, index) => {
+            const messageTimeout = setTimeout(() => {
+                if (!isWelcomeSequenceActive) return; // Check if cancelled before each message
+                addConsoleCommand(message);
+                if (index === CONSOLE_MESSAGES.welcome.length - 1) {
+                    const cursorTimeout = setTimeout(() => {
+                        if (isWelcomeSequenceActive) ensureConsoleCursor();
+                    }, 1750);
+                    welcomeTimeouts.push(cursorTimeout);
+                }
+            }, index * (index === 0 ? 2000 : 2500));
+            welcomeTimeouts.push(messageTimeout);
+        });
+    }, 2000);
+    welcomeTimeouts.push(initialTimeout);
+}
+
+function addConsoleCommand(command) {
+    const consoleOutput = document.querySelector('.console-output');
+    if (!consoleOutput) return;
+    
+    const newLine = document.createElement('div');
+    newLine.className = 'console-line';
+    newLine.innerHTML = command;
+    consoleOutput.appendChild(newLine);
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
+
+// ================================================
+// 📊 CHART INITIALIZATION
+// ================================================
+
 function initializeChart() {
     const ctx = document.getElementById('cowBehaviorChart').getContext('2d');
     
-    // AMS visit interval data based on Isaac's actual research
-    const chart = new Chart(ctx, {
+    new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            labels: CHART_CONFIG.weeks,
             datasets: [{
                 label: 'Control',
-                data: [630, 627, 600, 578], // Decreasing trend for control
-                backgroundColor: 'rgba(255, 219, 119, 0.8)', // Yellow from research
+                data: CHART_CONFIG.controlData,
+                backgroundColor: 'rgba(255, 219, 119, 0.8)',
                 borderColor: 'rgba(224, 170, 44, 1)',
                 borderWidth: 1,
                 borderRadius: 4
             }, {
                 label: 'Treatment',
-                data: [650, 635, 610, 568], // Steeper decrease for treatment
-                backgroundColor: 'rgba(67, 106, 179, 0.8)', // Blue from research
+                data: CHART_CONFIG.treatmentData,
+                backgroundColor: 'rgba(67, 106, 179, 0.8)',
                 borderColor: 'rgba(62, 97, 160, 1)',
                 borderWidth: 1,
                 borderRadius: 4
@@ -45,87 +498,55 @@ function initializeChart() {
             plugins: {
                 title: {
                     display: true,
-                    text: 'AMS Visit Intervals: Control vs PRT Treatment',
-                    font: {
-                        size: 14,
-                        weight: 'bold'
-                    },
+                    text: CHART_CONFIG.title,
+                    font: { size: 14, weight: 'bold' },
                     color: '#333'
                 },
                 legend: {
                     display: true,
                     position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        font: {
-                            size: 11
-                        }
-                    }
+                    labels: { usePointStyle: true, font: { size: 11 } }
                 }
             },
             scales: {
                 x: {
                     title: {
                         display: true,
-                        text: 'Week(s) After AMS Transition',
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        }
+                        text: CHART_CONFIG.xAxisTitle,
+                        font: { size: 12, weight: 'bold' }
                     },
-                    grid: {
-                        color: 'rgba(0,0,0,0.1)'
-                    }
+                    grid: { color: 'rgba(0,0,0,0.1)' }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Mean Daily Max Visit Interval (Minutes)',
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        }
+                        text: CHART_CONFIG.yAxisTitle,
+                        font: { size: 12, weight: 'bold' }
                     },
                     min: 0,
                     max: 800,
-                    grid: {
-                        color: 'rgba(0,0,0,0.1)'
-                    }
+                    grid: { color: 'rgba(0,0,0,0.1)' }
                 }
             },
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            }
+            interaction: { intersect: false, mode: 'index' }
         }
     });
 }
 
-// Tab switching functionality
+// ================================================
+// 🔄 TAB SWITCHING
+// ================================================
+
 function setupTabSwitching() {
-    const tabs = document.querySelectorAll('.tab[data-tab]');
+    const tabs = document.querySelectorAll('.left-column .tab[data-tab]');
     const codeEditors = document.querySelectorAll('.code-editor');
     const gameContainer = document.getElementById('game-container');
-    
-    console.log('Found tabs:', tabs.length);
-    console.log('Found code editors:', codeEditors.length);
-    console.log('Found game container:', gameContainer);
-    
-    // Ensure cow gallery is visible by default
     const cowGalleryContainer = document.getElementById('cow-gallery-container');
-    if (cowGalleryContainer) {
-        cowGalleryContainer.style.display = 'flex';
-    }
     
-    // Hide game container by default
-    if (gameContainer) {
-        gameContainer.style.display = 'none';
-    }
-    
-    // Ensure all code editors are hidden initially
-    codeEditors.forEach(editor => {
-        editor.style.display = 'none';
-    });
+    // Set initial visibility
+    if (cowGalleryContainer) cowGalleryContainer.style.display = 'flex';
+    if (gameContainer) gameContainer.style.display = 'none';
+    codeEditors.forEach(editor => editor.style.display = 'none');
     
     tabs.forEach(tab => {
         tab.addEventListener('click', function(e) {
@@ -133,228 +554,86 @@ function setupTabSwitching() {
             e.stopPropagation();
             
             const tabId = this.getAttribute('data-tab');
-            console.log('Tab clicked:', tabId);
             
-            // Remove active class from all tabs in source pane
-            const sourceTabs = document.querySelectorAll('.source-pane .tab, .game-pane .tab');
-            sourceTabs.forEach(t => t.classList.remove('active'));
-            
-            // Add active class to clicked tab
+            // Update active tab
+            document.querySelectorAll('.left-column .tab').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             
-            // Handle different tab types
+            // Show appropriate content
             if (tabId === 'cow-gallery') {
-                // Show cow gallery, hide everything else
-                if (cowGalleryContainer) {
-                    cowGalleryContainer.style.display = 'flex';
-                }
-                if (gameContainer) {
-                    gameContainer.style.display = 'none';
-                }
-                codeEditors.forEach(editor => {
-                    editor.style.display = 'none';
-                });
-                console.log('Showing cow gallery');
+                showElement(cowGalleryContainer);
+                hideElements([gameContainer, ...codeEditors]);
             } else if (tabId === 'feed-a-cow') {
-                // Show game, hide all code editors and gallery
-                if (gameContainer) {
-                    gameContainer.style.display = 'flex';
-                }
-                if (cowGalleryContainer) {
-                    cowGalleryContainer.style.display = 'none';
-                }
-                codeEditors.forEach(editor => {
-                    editor.style.display = 'none';
-                });
-                console.log('Showing game');
+                showElement(gameContainer);
+                hideElements([cowGalleryContainer, ...codeEditors]);
             } else {
-                // Show code editor, hide game and gallery
-                if (gameContainer) {
-                    gameContainer.style.display = 'none';
-                }
-                if (cowGalleryContainer) {
-                    cowGalleryContainer.style.display = 'none';
-                }
-                
-                // Hide all code editors first
-                codeEditors.forEach(editor => {
-                    editor.style.display = 'none';
-                });
-                
-                // Show selected code editor
-                if (tabId) {
-                    const selectedEditor = document.getElementById(tabId);
-                    console.log('Looking for editor with ID:', tabId);
-                    console.log('Found editor:', selectedEditor);
-                    if (selectedEditor) {
-                        selectedEditor.style.display = 'flex';
-                        console.log('Showing editor:', tabId);
-                    } else {
-                        console.log('Editor not found:', tabId);
-                        // List all available editors
-                        console.log('Available editors:', Array.from(codeEditors).map(e => e.id));
-                    }
-                }
+                hideElements([gameContainer, cowGalleryContainer, ...codeEditors]);
+                const selectedEditor = document.getElementById(tabId);
+                if (selectedEditor) showElement(selectedEditor);
             }
         });
     });
 }
 
-// Object interactions in Environment pane
+function showElement(element) {
+    if (element) element.style.display = 'flex';
+}
+
+function hideElements(elements) {
+    elements.forEach(element => {
+        if (element) element.style.display = 'none';
+    });
+}
+
+// ================================================
+// 🔍 OBJECT INTERACTIONS
+// ================================================
+
 function setupObjectInteractions() {
     const objectItems = document.querySelectorAll('.object-item');
-    
-    console.log('Found object items:', objectItems.length);
     
     objectItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
-            console.log('Object clicked:', this);
-            
-            // Add visual feedback
+            // Visual feedback
             this.style.background = '#007acc';
-            setTimeout(() => {
-                this.style.background = '';
-            }, 200);
+            setTimeout(() => this.style.background = '', 200);
             
-            // Simulate object inspection
             const objectName = this.querySelector('.object-name').textContent;
-            console.log('Object name:', objectName);
             showObjectDetails(objectName);
         });
     });
 }
 
-// Helper function to ensure console scrolls to bottom
-function scrollConsoleToBottom() {
-    const consoleOutput = document.querySelector('.console-output');
-    console.log('=== scrollConsoleToBottom called');
-    console.log('Console output element:', consoleOutput);
-    
-    if (consoleOutput) {
-        console.log('Current scrollTop:', consoleOutput.scrollTop);
-        console.log('ScrollHeight:', consoleOutput.scrollHeight);
-        console.log('ClientHeight:', consoleOutput.clientHeight);
-        
-        // Multiple attempts to ensure scrolling works
-        consoleOutput.scrollTop = consoleOutput.scrollHeight;
-        console.log('Set scrollTop to:', consoleOutput.scrollTop);
-        
-        setTimeout(() => {
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
-            console.log('After 10ms - scrollTop:', consoleOutput.scrollTop);
-        }, 10);
-        setTimeout(() => {
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
-            console.log('After 50ms - scrollTop:', consoleOutput.scrollTop);
-        }, 50);
-    } else {
-        console.error('Console output element not found for scrolling!');
-    }
-}
-
-// Show object details in console
 function showObjectDetails(objectName) {
-    console.log('=== showObjectDetails called with:', objectName);
-    
     const consoleOutput = document.querySelector('.console-output');
-    console.log('Console output element:', consoleOutput);
+    if (!consoleOutput) return;
     
-    if (!consoleOutput) {
-        console.error('Console output element not found!');
-        return;
-    }
+    const details = OBJECT_DETAILS[objectName] || `Object '${objectName}' not found`;
     
-    const details = getObjectDetails(objectName);
-    console.log('Object details:', details);
-    
-    console.log('Showing details for:', objectName);
-    
-    // Add new console line
+    // Add command line
     const newLine = document.createElement('div');
     newLine.className = 'console-line';
     newLine.innerHTML = `> <span class="command">str(${objectName})</span>`;
     consoleOutput.appendChild(newLine);
-    console.log('Added command line to console');
+    ensureConsoleCursor();
     
-    // Scroll to bottom immediately for the command
-    scrollConsoleToBottom();
-    
-    // Add object details
-    setTimeout(() => {
+    // Add details after delay
+        setTimeout(() => {
         const detailsLine = document.createElement('div');
         detailsLine.className = 'console-line';
         detailsLine.innerHTML = details;
         consoleOutput.appendChild(detailsLine);
-        console.log('Added details line to console');
-        
-        // Scroll to bottom after adding details
-        scrollConsoleToBottom();
+        ensureConsoleCursor();
     }, 500);
 }
 
-// Get object details based on name
-function getObjectDetails(objectName) {
-    const details = {
-        'readme': `Environment tabs are clickable as well as the top left R tabs. Feed a Cow! game is playable and has sounds!`,
-        
-        'mission': `chr "Making dairy cow lives incrementally better over time"<br><br>
-This represents my core motivation and the driving force behind my research. 
-Every study, every analysis, every day spent in the field is guided by this 
-simple goal: improving the welfare and quality of life for dairy cattle.`,
-        
-        'field_of_study': `chr "Master of Food and Resource Economics at the University of British Columbia"`,
-        
-        'current_status': `chr "At the first Vancouver community Cursor Workshop!"`,
-        
-        'daily_means': `This is confidential data... but contact me if you want to collaborate!`,
-        
-        'regrouped_cows': `This one too!`
-    };
-    
-    return details[objectName] || `Object '${objectName}' not found`;
-}
+// ================================================
+// ▶️ RUN BUTTON & CODE EXECUTION
+// ================================================
 
-// Console simulation
-function setupConsoleSimulation() {
-    const consoleOutput = document.querySelector('.console-output');
-    
-    // Remove the initial cursor when text starts
-    setTimeout(() => {
-        const initialCursor = consoleOutput.querySelector('.cursor');
-        if (initialCursor) {
-            initialCursor.remove();
-        }
-        
-        // Add some initial commands
-        addConsoleCommand('> Hello.');
-        setTimeout(() => {
-            addConsoleCommand('> Welcome to my research dashboard.');
-            setTimeout(() => {
-                addConsoleCommand('> I wonder if we can train cows to udder-stand robots?');
-                setTimeout(() => {
-                    addConsoleCommand('> 181 cows enrolled...');
-                    setTimeout(() => {
-                        addConsoleCommand('> <span class="cursor">|</span>');
-                    }, 1750);
-                }, 2500);
-            }, 2500);
-        }, 1250);
-    }, 2000);
-}
-
-function addConsoleCommand(command) {
-    const consoleOutput = document.querySelector('.console-output');
-    const newLine = document.createElement('div');
-    newLine.className = 'console-line';
-    newLine.innerHTML = command;
-    consoleOutput.appendChild(newLine);
-    consoleOutput.scrollTop = consoleOutput.scrollHeight;
-}
-
-// Run button functionality
 function setupRunButton() {
     const runButtons = document.querySelectorAll('.run-btn');
     
@@ -363,18 +642,14 @@ function setupRunButton() {
             e.preventDefault();
             e.stopPropagation();
             
-            console.log('Run button clicked');
-            
             // Visual feedback
             this.style.color = '#4caf50';
             this.style.transform = 'scale(1.1)';
-            
-            setTimeout(() => {
+        setTimeout(() => {
                 this.style.color = '';
                 this.style.transform = '';
             }, 200);
             
-            // Simulate code execution
             simulateCodeExecution();
         });
     });
@@ -382,84 +657,398 @@ function setupRunButton() {
 
 function simulateCodeExecution() {
     const consoleOutput = document.querySelector('.console-output');
+    if (!consoleOutput) return;
     
-    // Remove any existing cursor before starting
-    const existingCursor = consoleOutput.querySelector('.cursor');
-    if (existingCursor) {
-        existingCursor.remove();
-    }
+    // Clear any ongoing animations first
+    clearConsoleAnimations();
+    isExecutionSequenceActive = true;
     
-    // Add execution command
-    addConsoleCommand('> source("cow_welfare_analysis.R")');
+    // Remove existing cursors
+    const existingCursors = consoleOutput.querySelectorAll('.cursor');
+    existingCursors.forEach(cursor => cursor.parentElement.remove());
     
-    setTimeout(() => {
-        addConsoleCommand('Loading required package: ggplot2');
-        setTimeout(() => {
-            addConsoleCommand('Loading required package: dplyr');
-            setTimeout(() => {
-                addConsoleCommand('Loading required package: lme4');
-                setTimeout(() => {
-                    addConsoleCommand('Loading required package: lmerTest');
-                    setTimeout(() => {
-                        addConsoleCommand('Loading required package: MuMIn');
-                        setTimeout(() => {
-                            addConsoleCommand('> Cows walking towards the robot... 🐄🤖');
-                            setTimeout(() => {
-                                addConsoleCommand('> Analyzing visit intervals... ⏰');
-                                setTimeout(() => {
-                                    addConsoleCommand('> PRT training showing positive results! 🌾');
-                                    setTimeout(() => {
-                                        addConsoleCommand('> Mixed effects model running... 📊');
-                                        setTimeout(() => {
-                                            addConsoleCommand('> Treatment group adapting faster! ⚡');
-                                            setTimeout(() => {
-                                                addConsoleCommand('> Model diagnostics complete! ✅');
-                                                setTimeout(() => {
-                                                    addConsoleCommand('Analysis complete! Check the Plots tab for visualization.');
-                                                    setTimeout(() => {
-                                                        addConsoleCommand('> <span class="cursor">|</span>');
-                                                    }, 500);
-                                                }, 500);
-                                            }, 500);
-                                        }, 500);
-                                    }, 500);
-                                }, 500);
-                            }, 500);
-                        }, 500);
-                    }, 500);
+    // Display execution messages
+    CONSOLE_MESSAGES.execution.forEach((message, index) => {
+        const messageTimeout = setTimeout(() => {
+            if (!isExecutionSequenceActive) return; // Check if cancelled
+            addConsoleCommand(message);
+            if (index === CONSOLE_MESSAGES.execution.length - 1) {
+                const cursorTimeout = setTimeout(() => {
+                    if (isExecutionSequenceActive) ensureConsoleCursor();
                 }, 500);
-            }, 500);
-        }, 500);
-    }, 500);
+                executionTimeouts.push(cursorTimeout);
+            }
+        }, index * 500);
+        executionTimeouts.push(messageTimeout);
+    });
 }
 
-// Add some interactive hover effects
-document.addEventListener('DOMContentLoaded', function() {
-    // Add hover effects to code lines
+// ================================================
+// 🎮 FEED A COW GAME
+// ================================================
+
+function initFeedACowGame() {
+    const gameContainer = document.getElementById('game-container');
+    if (!gameContainer) return;
+    
+    const gameBoard = document.getElementById('game-board');
+    const startBtn = document.getElementById('start-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const scoreElement = document.getElementById('score');
+    const timerElement = document.getElementById('timer');
+    const highScoreElement = document.getElementById('high-score');
+    
+    let gameState = {
+        score: 0,
+        timeLeft: GAME_CONFIG.timeLimit,
+        gameActive: false,
+        gameInterval: null,
+        cowInterval: null,
+        activeCows: new Set(),
+        highScore: parseInt(localStorage.getItem('feedACowHighScore')) || 0
+    };
+    
+    highScoreElement.textContent = gameState.highScore;
+    
+    startBtn.addEventListener('click', () => startGame());
+    resetBtn.addEventListener('click', () => resetGame());
+    gameBoard.addEventListener('click', (e) => handleCowClick(e));
+    
+    function startGame() {
+        if (gameState.gameActive) return;
+        
+        gameState.gameActive = true;
+        gameState.score = 0;
+        gameState.timeLeft = GAME_CONFIG.timeLimit;
+        
+        startBtn.disabled = true;
+        startBtn.textContent = 'Playing...';
+        
+        updateDisplay();
+        
+        // Start timer
+        gameState.gameInterval = setInterval(() => {
+            gameState.timeLeft--;
+            updateDisplay();
+            if (gameState.timeLeft <= 0) endGame();
+        }, 1000);
+        
+        // Start spawning cows
+        spawnCow();
+        gameState.cowInterval = setInterval(spawnCow, GAME_CONFIG.cowSpeed);
+    }
+    
+    function resetGame() {
+        endGame();
+        gameState.score = 0;
+        gameState.timeLeft = GAME_CONFIG.timeLimit;
+        updateDisplay();
+        clearAllCows();
+    }
+    
+    function handleCowClick(e) {
+        if (!gameState.gameActive) return;
+        
+        const hole = e.target.closest('.cow-hole');
+        if (!hole || !hole.classList.contains('active')) return;
+        
+        const holeIndex = parseInt(hole.dataset.hole);
+        gameState.score += GAME_CONFIG.pointsPerCow;
+        hole.classList.remove('active');
+        hole.classList.add('fed');
+        gameState.activeCows.delete(holeIndex);
+        
+        playFeedingSound();
+        setTimeout(() => hole.classList.remove('fed'), 300);
+        updateDisplay();
+    }
+    
+    function spawnCow() {
+        if (!gameState.gameActive) return;
+        
+        const holes = Array.from(gameBoard.children);
+        const availableHoles = holes.filter(hole => !hole.classList.contains('active'));
+        
+        if (availableHoles.length === 0) return;
+        
+        const randomHole = availableHoles[Math.floor(Math.random() * availableHoles.length)];
+        const holeIndex = parseInt(randomHole.dataset.hole);
+        
+        randomHole.classList.add('active');
+        gameState.activeCows.add(holeIndex);
+    
+    setTimeout(() => {
+            if (randomHole.classList.contains('active')) {
+                randomHole.classList.remove('active');
+                gameState.activeCows.delete(holeIndex);
+            }
+        }, GAME_CONFIG.cowDuration);
+    }
+    
+    function clearAllCows() {
+        const holes = Array.from(gameBoard.children);
+        holes.forEach(hole => hole.classList.remove('active', 'fed'));
+        gameState.activeCows.clear();
+    }
+    
+    function playFeedingSound() {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.1);
+        oscillator.frequency.exponentialRampToValueAtTime(250, audioContext.currentTime + 0.2);
+        
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+    }
+    
+    function endGame() {
+        gameState.gameActive = false;
+        
+        if (gameState.gameInterval) {
+            clearInterval(gameState.gameInterval);
+            gameState.gameInterval = null;
+        }
+        
+        if (gameState.cowInterval) {
+            clearInterval(gameState.cowInterval);
+            gameState.cowInterval = null;
+        }
+        
+        startBtn.disabled = false;
+        startBtn.textContent = 'Start Game';
+        clearAllCows();
+        
+        // Check for high score
+        if (gameState.score > gameState.highScore) {
+            gameState.highScore = gameState.score;
+            highScoreElement.textContent = gameState.highScore;
+            localStorage.setItem('feedACowHighScore', gameState.highScore);
+            setTimeout(() => alert(`🎉 New High Score: ${gameState.score} points! 🐄`), 500);
+        }
+    }
+    
+    function updateDisplay() {
+        scoreElement.textContent = gameState.score;
+        timerElement.textContent = gameState.timeLeft;
+    }
+}
+
+// ================================================
+// 🖼️ COW GALLERY
+// ================================================
+
+function initCowGallery() {
+    let currentCowIndex = 0;
+    const totalCows = COW_DATA.length;
+
+    // Get DOM elements
+    const elements = {
+        cowImage: document.getElementById('cow-image'),
+        cowName: document.getElementById('cow-name'),
+        cowBreed: document.getElementById('cow-breed'),
+        cowLocation: document.getElementById('cow-location'),
+        cowDate: document.getElementById('cow-date'),
+        cowStory: document.getElementById('cow-story'),
+        currentCowSpan: document.getElementById('current-cow'),
+        totalCowsSpan: document.getElementById('total-cows'),
+        prevBtn: document.getElementById('prev-cow'),
+        nextBtn: document.getElementById('next-cow'),
+        galleryDots: document.getElementById('gallery-dots')
+    };
+
+    function initGallery() {
+        elements.totalCowsSpan.textContent = totalCows;
+        createDots();
+        updateCowDisplay();
+        updateNavigationButtons();
+    }
+
+    function createDots() {
+        elements.galleryDots.innerHTML = '';
+        for (let i = 0; i < totalCows; i++) {
+            const dot = document.createElement('div');
+            dot.className = `gallery-dot ${i === currentCowIndex ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToCow(i));
+            elements.galleryDots.appendChild(dot);
+        }
+    }
+
+    function updateCowDisplay() {
+        const cow = COW_DATA[currentCowIndex];
+        
+        // Update text content
+        elements.cowName.textContent = cow.name;
+        elements.cowBreed.textContent = cow.breed;
+        elements.cowLocation.textContent = cow.location;
+        elements.cowDate.textContent = cow.date;
+        elements.cowStory.textContent = cow.story;
+        elements.currentCowSpan.textContent = currentCowIndex + 1;
+        
+        // Update image
+        if (cow.image) {
+            elements.cowImage.src = cow.image;
+            elements.cowImage.alt = cow.name;
+        }
+
+        // Handle special "And Many More to Come!" page
+        if (cow.name === "And Many More to Come!") {
+            hideElements([elements.cowImage, elements.cowBreed, elements.cowLocation, elements.cowDate, elements.cowStory]);
+            
+            Object.assign(elements.cowName.style, {
+                color: "#ffdb77",
+                fontSize: "56px",
+                fontWeight: "800",
+                textAlign: "center",
+                width: "100%",
+                position: "absolute",
+                top: "37%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                textShadow: "0 0 20px rgba(255, 219, 119, 0.5)",
+                letterSpacing: "2px",
+                fontFamily: "'Poppins', sans-serif"
+            });
+        } else {
+            // Reset to normal styling
+            showElements([elements.cowImage, elements.cowBreed, elements.cowLocation, elements.cowDate, elements.cowStory]);
+            
+            Object.assign(elements.cowName.style, {
+                color: "#ffffff",
+                fontSize: "20px",
+                fontWeight: "600",
+                width: "auto",
+                position: "static",
+                top: "auto",
+                left: "auto",
+                transform: "none",
+                textShadow: "none",
+                letterSpacing: "normal",
+                fontFamily: "'JetBrains Mono', monospace"
+            });
+        }
+
+        // Update dots
+        const dots = elements.galleryDots.querySelectorAll('.gallery-dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentCowIndex);
+        });
+    }
+
+    function updateNavigationButtons() {
+        elements.prevBtn.disabled = currentCowIndex === 0;
+        elements.nextBtn.disabled = false; // Allow cycling
+    }
+
+    function goToCow(index) {
+        if (index >= 0 && index < totalCows) {
+            currentCowIndex = index;
+            updateCowDisplay();
+            updateNavigationButtons();
+        }
+    }
+
+    function prevCow() {
+        if (currentCowIndex > 0) {
+            currentCowIndex--;
+            updateCowDisplay();
+            updateNavigationButtons();
+        }
+    }
+
+    function nextCow() {
+        currentCowIndex = (currentCowIndex + 1) % totalCows;
+        updateCowDisplay();
+        updateNavigationButtons();
+    }
+
+    // Event listeners
+    elements.prevBtn.addEventListener('click', prevCow);
+    elements.nextBtn.addEventListener('click', nextCow);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        const galleryContainer = document.getElementById('cow-gallery-container');
+        if (galleryContainer && galleryContainer.style.display !== 'none') {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevCow();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                nextCow();
+            }
+        }
+    });
+
+    initGallery();
+}
+
+// ================================================
+// 📱 MOBILE WARNING
+// ================================================
+
+function setupMobileWarning() {
+    const mobileWarning = document.getElementById('mobile-warning');
+    
+    function isMobile() {
+        return window.innerWidth < 768 && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    
+    if (isMobile()) {
+        mobileWarning.style.display = 'flex';
+    } else {
+        mobileWarning.style.display = 'none';
+    }
+    
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (!isMobile()) {
+                mobileWarning.style.display = 'none';
+            } else {
+                mobileWarning.style.display = 'flex';
+            }
+        }, 150);
+    });
+}
+
+// ================================================
+// ⌨️ KEYBOARD SHORTCUTS & INTERACTIONS
+// ================================================
+
+function setupLightweightAffordances() {
+    // Code line hover effects
     const codeLines = document.querySelectorAll('.code-line');
     codeLines.forEach(line => {
         line.addEventListener('mouseenter', function() {
             this.style.background = 'rgba(255, 255, 255, 0.05)';
         });
-        
         line.addEventListener('mouseleave', function() {
             this.style.background = '';
         });
     });
     
-    // Add click effects to pane buttons
+    // Button click effects
     const paneButtons = document.querySelectorAll('.pane-btn');
     paneButtons.forEach(button => {
         button.addEventListener('click', function() {
             this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 100);
+            setTimeout(() => this.style.transform = '', 100);
         });
     });
-});
+}
 
-// Add keyboard shortcuts simulation
+// Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
     if (e.ctrlKey || e.metaKey) {
         switch(e.key) {
@@ -468,9 +1057,6 @@ document.addEventListener('keydown', function(e) {
                 showNotification('Why did you try to save?!');
                 break;
             case 'r':
-                e.preventDefault();
-                simulateCodeExecution();
-                break;
             case 'Enter':
                 e.preventDefault();
                 simulateCodeExecution();
@@ -485,7 +1071,7 @@ function showNotification(message) {
         position: fixed;
         top: 100px;
         right: 20px;
-        background:rgb(230, 93, 65);
+        background: rgb(230, 93, 65);
         color: white;
         padding: 10px 15px;
         border-radius: 4px;
@@ -496,37 +1082,17 @@ function showNotification(message) {
     notification.textContent = message;
     document.body.appendChild(notification);
     
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    setTimeout(() => notification.remove(), 3000);
 }
 
-// Add CSS for animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    
-    .command {
-        color: #569cd6;
-        font-weight: 500;
-    }
-    
-    .code-line:hover {
-        background: rgba(255, 255, 255, 0.05);
-        transition: background 0.2s ease;
-    }
-`;
-document.head.appendChild(style);
+// ================================================
+// ✏️ CODE EDITING FUNCTIONALITY
+// ================================================
 
-// Setup code editing functionality
 function setupCodeEditing() {
     const editableElements = document.querySelectorAll('.code-content.editable');
     
     editableElements.forEach(element => {
-        // Handle Enter key to create new lines
         element.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -534,25 +1100,22 @@ function setupCodeEditing() {
                 newLine.className = 'code-line';
                 newLine.innerHTML = '<br>';
                 
-                // Insert new line
                 const selection = window.getSelection();
                 const range = selection.getRangeAt(0);
                 range.deleteContents();
                 range.insertNode(newLine);
                 
-                // Move cursor to new line
                 range.setStartAfter(newLine);
                 range.setEndAfter(newLine);
                 selection.removeAllRanges();
                 selection.addRange(range);
             }
             
-            // Handle Tab key for indentation
             if (e.key === 'Tab') {
                 e.preventDefault();
                 const selection = window.getSelection();
                 const range = selection.getRangeAt(0);
-                const tabNode = document.createTextNode('  '); // 2 spaces for indentation
+                const tabNode = document.createTextNode('  ');
                 range.insertNode(tabNode);
                 range.setStartAfter(tabNode);
                 range.setEndAfter(tabNode);
@@ -561,7 +1124,6 @@ function setupCodeEditing() {
             }
         });
         
-        // Handle paste to preserve formatting
         element.addEventListener('paste', function(e) {
             e.preventDefault();
             const text = (e.clipboardData || window.clipboardData).getData('text/plain');
@@ -583,657 +1145,39 @@ function setupCodeEditing() {
             });
         });
         
-        // Add click handler to focus
         element.addEventListener('click', function() {
             this.focus();
         });
     });
 }
 
-// Default layout configuration
-const DEFAULT_LAYOUT = {
-    // Column proportions (left:right)
-    leftColumnWidth: 66.67,  // 2fr out of 3fr total
-    rightColumnWidth: 33.33, // 1fr out of 3fr total
-    
-    // Left column row proportions (source:console)
-    leftTopHeight: 60,       // Source editor gets 60%
-    leftBottomHeight: 40,    // Console gets 40%
-    
-    // Right column row proportions (environment:plots)
-    rightTopHeight: 40,      // Environment gets 35%
-    rightBottomHeight: 60    // Plots gets 65%
-};
+// ================================================
+// 🎨 STYLES & ANIMATIONS
+// ================================================
 
-// Setup resizable panes
-function setupResizablePanes() {
-    const container = document.getElementById('panes-container');
-    const leftColumn = document.getElementById('left-column');
-    const rightColumn = document.getElementById('right-column');
-    const verticalHandle = document.getElementById('vertical-handle');
-    const horizontalLeftHandle = document.getElementById('horizontal-left-handle');
-    const horizontalRightHandle = document.getElementById('horizontal-right-handle');
-    
-    // Apply default layout
-    applyDefaultLayout();
-    
-    // Function to apply default layout
-    function applyDefaultLayout() {
-        // Set column proportions
-        container.style.gridTemplateColumns = `${DEFAULT_LAYOUT.leftColumnWidth}% ${DEFAULT_LAYOUT.rightColumnWidth}%`;
-        
-        // Set left column row proportions
-        leftColumn.style.gridTemplateRows = `${DEFAULT_LAYOUT.leftTopHeight}% ${DEFAULT_LAYOUT.leftBottomHeight}%`;
-        
-        // Set right column row proportions
-        rightColumn.style.gridTemplateRows = `${DEFAULT_LAYOUT.rightTopHeight}% ${DEFAULT_LAYOUT.rightBottomHeight}%`;
-        
-        // Position handles
-        verticalHandle.style.left = `${DEFAULT_LAYOUT.leftColumnWidth}%`;
-        horizontalLeftHandle.style.top = `${DEFAULT_LAYOUT.leftTopHeight}%`;
-        horizontalRightHandle.style.top = `${DEFAULT_LAYOUT.rightTopHeight}%`;
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
     }
     
-    let isResizing = false;
-    let resizeType = null;
-    let startX, startY, startLeftWidth, startRightWidth, startTopHeight, startBottomHeight;
-    
-    // Vertical resize (left/right)
-    verticalHandle.addEventListener('mousedown', function(e) {
-        isResizing = true;
-        resizeType = 'vertical';
-        startX = e.clientX;
-        
-        // Keep handles visible during resize
-        verticalHandle.style.opacity = '0.3';
-        horizontalLeftHandle.style.opacity = '0.3';
-        horizontalRightHandle.style.opacity = '0.3';
-        
-        // Get current grid template columns
-        const currentColumns = container.style.gridTemplateColumns || '2fr 1fr';
-        const parts = currentColumns.split(' ');
-        startLeftWidth = parts[0] === '2fr' ? 66.67 : parseFloat(parts[0]);
-        startRightWidth = parts[1] === '1fr' ? 33.33 : parseFloat(parts[1]);
-        
-        document.addEventListener('mousemove', handleResize);
-        document.addEventListener('mouseup', stopResize);
-        e.preventDefault();
-    });
-    
-    // Horizontal resize for left panes (source/console)
-    horizontalLeftHandle.addEventListener('mousedown', function(e) {
-        isResizing = true;
-        resizeType = 'horizontal-left';
-        startY = e.clientY;
-        
-        // Keep handles visible during resize
-        verticalHandle.style.opacity = '0.3';
-        horizontalLeftHandle.style.opacity = '0.3';
-        horizontalRightHandle.style.opacity = '0.3';
-        
-        // Get current left column grid template rows
-        const currentRows = leftColumn.style.gridTemplateRows || '1fr 1fr';
-        const parts = currentRows.split(' ');
-        startTopHeight = parts[0] === '1fr' ? 50 : parseFloat(parts[0]);
-        startBottomHeight = parts[1] === '1fr' ? 50 : parseFloat(parts[1]);
-        
-        document.addEventListener('mousemove', handleResize);
-        document.addEventListener('mouseup', stopResize);
-        e.preventDefault();
-    });
-    
-    // Horizontal resize for right panes (environment/plots)
-    horizontalRightHandle.addEventListener('mousedown', function(e) {
-        isResizing = true;
-        resizeType = 'horizontal-right';
-        startY = e.clientY;
-        
-        // Keep handles visible during resize
-        verticalHandle.style.opacity = '0.3';
-        horizontalLeftHandle.style.opacity = '0.3';
-        horizontalRightHandle.style.opacity = '0.3';
-        
-        // Get current right column grid template rows
-        const currentRows = rightColumn.style.gridTemplateRows || '1fr 1fr';
-        const parts = currentRows.split(' ');
-        startTopHeight = parts[0] === '1fr' ? 50 : parseFloat(parts[0]);
-        startBottomHeight = parts[1] === '1fr' ? 50 : parseFloat(parts[1]);
-        
-        document.addEventListener('mousemove', handleResize);
-        document.addEventListener('mouseup', stopResize);
-        e.preventDefault();
-    });
-    
-    function handleResize(e) {
-        if (!isResizing) return;
-        
-        if (resizeType === 'vertical') {
-            const deltaX = e.clientX - startX;
-            const containerWidth = container.offsetWidth;
-            const deltaPercent = (deltaX / containerWidth) * 100;
-            
-            const newLeftWidth = startLeftWidth + deltaPercent;
-            const newRightWidth = startRightWidth - deltaPercent;
-            
-            // Constrain resize to reasonable limits
-            const minWidth = 20; // 20% minimum
-            const maxWidth = 80; // 80% maximum
-            
-            if (newLeftWidth >= minWidth && newLeftWidth <= maxWidth && 
-                newRightWidth >= minWidth && newRightWidth <= maxWidth) {
-                container.style.gridTemplateColumns = `${newLeftWidth}% ${newRightWidth}%`;
-                
-                // Update vertical handle position
-                verticalHandle.style.left = `${newLeftWidth}%`;
-            }
-        } else if (resizeType === 'horizontal-left') {
-            const deltaY = e.clientY - startY;
-            const leftHeight = leftColumn.offsetHeight;
-            const deltaPercent = (deltaY / leftHeight) * 100;
-            
-            const newTopHeight = startTopHeight + deltaPercent;
-            const newBottomHeight = startBottomHeight - deltaPercent;
-            
-            // Constrain resize to reasonable limits
-            const minHeight = 20; // 20% minimum
-            const maxHeight = 80; // 80% maximum
-            
-            if (newTopHeight >= minHeight && newTopHeight <= maxHeight && 
-                newBottomHeight >= minHeight && newBottomHeight <= maxHeight) {
-                leftColumn.style.gridTemplateRows = `${newTopHeight}% ${newBottomHeight}%`;
-                
-                // Update left horizontal handle position
-                horizontalLeftHandle.style.top = `${newTopHeight}%`;
-            }
-        } else if (resizeType === 'horizontal-right') {
-            const deltaY = e.clientY - startY;
-            const rightHeight = rightColumn.offsetHeight;
-            const deltaPercent = (deltaY / rightHeight) * 100;
-            
-            const newTopHeight = startTopHeight + deltaPercent;
-            const newBottomHeight = startBottomHeight - deltaPercent;
-            
-            // Constrain resize to reasonable limits
-            const minHeight = 20; // 20% minimum
-            const maxHeight = 80; // 80% maximum
-            
-            if (newTopHeight >= minHeight && newTopHeight <= maxHeight && 
-                newBottomHeight >= minHeight && newBottomHeight <= maxHeight) {
-                rightColumn.style.gridTemplateRows = `${newTopHeight}% ${newBottomHeight}%`;
-                
-                // Update right horizontal handle position
-                horizontalRightHandle.style.top = `${newTopHeight}%`;
-            }
-        }
+    .command {
+        color: #569cd6;
+        font-weight: 500;
     }
     
-    function stopResize() {
-        isResizing = false;
-        resizeType = null;
-        document.removeEventListener('mousemove', handleResize);
-        document.removeEventListener('mouseup', stopResize);
-        
-        // Keep handles visible briefly after resize for better UX
-        setTimeout(() => {
-            if (!isResizing) {
-                verticalHandle.style.opacity = '0';
-                horizontalLeftHandle.style.opacity = '0';
-                horizontalRightHandle.style.opacity = '0';
-            }
-        }, 500);
+    .code-line:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transition: background 0.2s ease;
     }
-    
-    // Make handles more visible on hover
-    container.addEventListener('mouseenter', function() {
-        verticalHandle.style.opacity = '0.3';
-        horizontalLeftHandle.style.opacity = '0.3';
-        horizontalRightHandle.style.opacity = '0.3';
-    });
-    
-    container.addEventListener('mouseleave', function() {
-        if (!isResizing) {
-            verticalHandle.style.opacity = '0';
-            horizontalLeftHandle.style.opacity = '0';
-            horizontalRightHandle.style.opacity = '0';
-        }
-    });
-}
+`;
+document.head.appendChild(style);
 
-// Global function to reset layout to defaults (can be called from console)
-window.resetLayout = function() {
-    const container = document.getElementById('panes-container');
-    const leftColumn = document.getElementById('left-column');
-    const rightColumn = document.getElementById('right-column');
-    const verticalHandle = document.getElementById('vertical-handle');
-    const horizontalLeftHandle = document.getElementById('horizontal-left-handle');
-    const horizontalRightHandle = document.getElementById('horizontal-right-handle');
-    
-    // Apply default layout
-    container.style.gridTemplateColumns = `${DEFAULT_LAYOUT.leftColumnWidth}% ${DEFAULT_LAYOUT.rightColumnWidth}%`;
-    leftColumn.style.gridTemplateRows = `${DEFAULT_LAYOUT.leftTopHeight}% ${DEFAULT_LAYOUT.leftBottomHeight}%`;
-    rightColumn.style.gridTemplateRows = `${DEFAULT_LAYOUT.rightTopHeight}% ${DEFAULT_LAYOUT.rightBottomHeight}%`;
-    
-    // Position handles
-    verticalHandle.style.left = `${DEFAULT_LAYOUT.leftColumnWidth}%`;
-    horizontalLeftHandle.style.top = `${DEFAULT_LAYOUT.leftTopHeight}%`;
-    horizontalRightHandle.style.top = `${DEFAULT_LAYOUT.rightTopHeight}%`;
-    
-    console.log('🎯 Layout reset to defaults!');
-};
-
-// Feed a Cow Game
-function initFeedACowGame() {
-    const gameContainer = document.getElementById('game-container');
-    const gameBoard = document.getElementById('game-board');
-    const startBtn = document.getElementById('start-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const scoreElement = document.getElementById('score');
-    const timerElement = document.getElementById('timer');
-    const highScoreElement = document.getElementById('high-score');
-    
-    let score = 0;
-    let timeLeft = 30;
-    let gameActive = false;
-    let gameInterval = null;
-    let cowInterval = null;
-    let highScore = localStorage.getItem('feedACowHighScore') || 0;
-    
-    // Initialize high score
-    highScoreElement.textContent = highScore;
-    
-    // Game state
-    const gameState = {
-        activeCows: new Set(),
-        cowSpeed: 2000, // milliseconds between cow appearances (increased from 1500)
-        cowDuration: 2500 // how long cows stay visible (increased from 2000)
-    };
-    
-    // Start game
-    startBtn.addEventListener('click', function() {
-        if (gameActive) return;
-        
-        gameActive = true;
-        score = 0;
-        timeLeft = 30;
-        
-        startBtn.disabled = true;
-        startBtn.textContent = 'Playing...';
-        
-        updateDisplay();
-        
-        // Start timer
-        gameInterval = setInterval(() => {
-            timeLeft--;
-            updateDisplay();
-            
-            if (timeLeft <= 0) {
-                endGame();
-            }
-        }, 1000);
-        
-        // Start spawning cows
-        spawnCow();
-        cowInterval = setInterval(spawnCow, gameState.cowSpeed);
-    });
-    
-    // Reset game
-    resetBtn.addEventListener('click', function() {
-        endGame();
-        score = 0;
-        timeLeft = 30;
-        updateDisplay();
-        clearAllCows();
-    });
-    
-    // Cow hole click handler
-    gameBoard.addEventListener('click', function(e) {
-        if (!gameActive) return;
-        
-        const hole = e.target.closest('.cow-hole');
-        if (!hole) return;
-        
-        const holeIndex = parseInt(hole.dataset.hole);
-        
-        if (hole.classList.contains('active')) {
-            // Feed a cow!
-            score += 10;
-            hole.classList.remove('active');
-            hole.classList.add('fed');
-            gameState.activeCows.delete(holeIndex);
-            
-            // Play feeding sound effect
-            playFeedingSound();
-            
-            // Remove fed effect after animation
-            setTimeout(() => {
-                hole.classList.remove('fed');
-            }, 300);
-            
-            updateDisplay();
-        }
-    });
-    
-    function spawnCow() {
-        if (!gameActive) return;
-        
-        const holes = Array.from(gameBoard.children);
-        const availableHoles = holes.filter(hole => !hole.classList.contains('active'));
-        
-        if (availableHoles.length === 0) return;
-        
-        const randomHole = availableHoles[Math.floor(Math.random() * availableHoles.length)];
-        const holeIndex = parseInt(randomHole.dataset.hole);
-        
-        // Show cow
-        randomHole.classList.add('active');
-        gameState.activeCows.add(holeIndex);
-        
-        // Hide cow after duration
-        setTimeout(() => {
-            if (randomHole.classList.contains('active')) {
-                randomHole.classList.remove('active');
-                gameState.activeCows.delete(holeIndex);
-            }
-        }, gameState.cowDuration);
-    }
-    
-    function clearAllCows() {
-        const holes = Array.from(gameBoard.children);
-        holes.forEach(hole => {
-            hole.classList.remove('active', 'fed');
-        });
-        gameState.activeCows.clear();
-    }
-    
-    function playFeedingSound() {
-        // Create a gentle, satisfying sound effect using Web Audio API
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        
-        // Create a gentle "moo" sound with a happy tone
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        // Gentle, happy frequency progression
-        oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.1);
-        oscillator.frequency.exponentialRampToValueAtTime(250, audioContext.currentTime + 0.2);
-        
-        // Gentle volume envelope
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.05);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
-    }
-    
-    function endGame() {
-        gameActive = false;
-        
-        if (gameInterval) {
-            clearInterval(gameInterval);
-            gameInterval = null;
-        }
-        
-        if (cowInterval) {
-            clearInterval(cowInterval);
-            cowInterval = null;
-        }
-        
-        startBtn.disabled = false;
-        startBtn.textContent = 'Start Game';
-        
-        clearAllCows();
-        
-        // Update high score
-        if (score > highScore) {
-            highScore = score;
-            highScoreElement.textContent = highScore;
-            localStorage.setItem('feedACowHighScore', highScore);
-            
-            // Show celebration
-            setTimeout(() => {
-                alert(`🎉 New High Score: ${score} points! 🐄`);
-            }, 500);
-        }
-    }
-    
-    function updateDisplay() {
-        scoreElement.textContent = score;
-        timerElement.textContent = timeLeft;
-    }
-}
-
-// Cow Gallery functionality
-function initCowGallery() {
-    // Cow data - showcasing cows Isaac has met during research
-    const cowData = [
-        {
-            name: "3034",
-            breed: "Holstein",
-            location: "UBC Dairy Education and Research Centre",
-            date: "June 30, 2023",
-            image: "images/3034.jpg",
-            story: "3034 was the calf that pushed me toward graduate studies in animal welfare. She was born premature and nearly swept away by the manure scraper. I happened to be there to save her, but what stayed with me was the sound of cows calling for help while making sure not to trample her. That moment made me realize how little we truly understand cows, and how much we owe them the effort to try."
-        },
-        {
-            name: "10",
-            breed: "Water Buffalo",
-            location: "Academy Farms",
-            date: "August 24, 2024",
-            image: "images/10.jpg",
-            story: "Very funny girl from a farm with a great purpose!"
-        },
-        {
-            name: "Rocky",
-            breed: "Hereford",
-            location: "K&M Farms",
-            date: "July 19, 2025",
-            image: "images/Rocky.jpg",
-            story: "Rocky was a 4H steer, particularly one showed by the son of the owner of K&M Farms. He was as gentle as can be; the owner mentioned that he is very unaware of his humongous size, and often make way for people that are walking by."
-        }
-    ];
-
-    let currentCowIndex = 0;
-    const totalCows = cowData.length;
-
-    // Get DOM elements
-    const cowImage = document.getElementById('cow-image');
-    const cowName = document.getElementById('cow-name');
-    const cowBreed = document.getElementById('cow-breed');
-    const cowLocation = document.getElementById('cow-location');
-    const cowDate = document.getElementById('cow-date');
-    const cowStory = document.getElementById('cow-story');
-    const currentCowSpan = document.getElementById('current-cow');
-    const totalCowsSpan = document.getElementById('total-cows');
-    const prevBtn = document.getElementById('prev-cow');
-    const nextBtn = document.getElementById('next-cow');
-    const galleryDots = document.getElementById('gallery-dots');
-
-    // Initialize gallery
-    function initGallery() {
-        totalCowsSpan.textContent = totalCows;
-        createDots();
-        updateCowDisplay();
-        updateNavigationButtons();
-    }
-
-    // Create navigation dots
-    function createDots() {
-        galleryDots.innerHTML = '';
-        for (let i = 0; i < totalCows; i++) {
-            const dot = document.createElement('div');
-            dot.className = `gallery-dot ${i === currentCowIndex ? 'active' : ''}`;
-            dot.addEventListener('click', () => goToCow(i));
-            galleryDots.appendChild(dot);
-        }
-    }
-
-    // Update cow display
-    function updateCowDisplay() {
-        const cow = cowData[currentCowIndex];
-        
-        // Update all text content first for immediate display
-        cowName.textContent = cow.name;
-        cowBreed.textContent = cow.breed;
-        cowLocation.textContent = cow.location;
-        cowDate.textContent = cow.date;
-        cowStory.textContent = cow.story;
-        currentCowSpan.textContent = currentCowIndex + 1;
-        
-        // Update image after text to prevent loading delays
-        if (cow.image) {
-            cowImage.src = cow.image;
-            cowImage.alt = cow.name;
-        }
-
-        // Special styling for the final "And Many More to Come!" page
-        if (cow.name === "And Many More to Come!") {
-            // Hide everything except the title
-            cowImage.style.display = "none";
-            cowBreed.style.display = "none";
-            cowLocation.style.display = "none";
-            cowDate.style.display = "none";
-            cowStory.style.display = "none";
-            
-            // Style the title to be big, centered, and beautiful
-            cowName.style.color = "#ffdb77";
-            cowName.style.fontSize = "56px";
-            cowName.style.fontWeight = "800";
-            cowName.style.textAlign = "center";
-            cowName.style.width = "100%";
-            cowName.style.position = "absolute";
-            cowName.style.top = "37%";
-            cowName.style.left = "50%";
-            cowName.style.transform = "translate(-50%, -50%)";
-            cowName.style.textShadow = "0 0 20px rgba(255, 219, 119, 0.5)";
-            cowName.style.letterSpacing = "2px";
-            cowName.style.fontFamily = "'Poppins', sans-serif";
-        } else {
-            // Reset to normal styling
-            cowImage.style.display = "block";
-            cowName.style.color = "#ffffff";
-            cowName.style.fontSize = "20px";
-            cowName.style.fontWeight = "600";
-            cowName.style.textAlign = "left";
-            cowName.style.width = "auto";
-            cowName.style.position = "static";
-            cowName.style.top = "auto";
-            cowName.style.left = "auto";
-            cowName.style.transform = "none";
-            cowName.style.textShadow = "none";
-            cowName.style.letterSpacing = "normal";
-            cowName.style.fontFamily = "'JetBrains Mono', monospace";
-            cowBreed.style.display = "block";
-            cowLocation.style.display = "block";
-            cowDate.style.display = "block";
-            cowStory.style.display = "block";
-            cowBreed.style.color = "#d4d4d4";
-            cowLocation.style.color = "#d4d4d4";
-            cowDate.style.color = "#d4d4d4";
-            cowStory.style.fontStyle = "italic";
-            cowStory.style.fontWeight = "400";
-        }
-
-        // Update dots
-        const dots = galleryDots.querySelectorAll('.gallery-dot');
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentCowIndex);
-        });
-    }
-
-    // Update navigation buttons
-    function updateNavigationButtons() {
-        prevBtn.disabled = currentCowIndex === 0;
-        // Don't disable next button on the last page - allow cycling back to first
-        nextBtn.disabled = false;
-    }
-
-    // Go to specific cow
-    function goToCow(index) {
-        if (index >= 0 && index < totalCows) {
-            currentCowIndex = index;
-            updateCowDisplay();
-            updateNavigationButtons();
-        }
-    }
-
-    // Previous cow
-    function prevCow() {
-        if (currentCowIndex > 0) {
-            currentCowIndex--;
-            updateCowDisplay();
-            updateNavigationButtons();
-        }
-    }
-
-    // Next cow
-    function nextCow() {
-        currentCowIndex = (currentCowIndex + 1) % totalCows;
-        updateCowDisplay();
-        updateNavigationButtons();
-    }
-
-    // Event listeners
-    prevBtn.addEventListener('click', prevCow);
-    nextBtn.addEventListener('click', nextCow);
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        // Only handle if cow gallery is visible
-        const galleryContainer = document.getElementById('cow-gallery-container');
-        if (galleryContainer && galleryContainer.style.display !== 'none') {
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                prevCow();
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                nextCow();
-            }
-        }
-    });
-
-    // Initialize the gallery
-    initGallery();
-}
-
-// Mobile warning functionality
-function setupMobileWarning() {
-    const mobileWarning = document.getElementById('mobile-warning');
-    const continueBtn = document.getElementById('mobile-continue');
-    
-    // Check if user is on mobile
-    function isMobile() {
-        return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-    
-    // Show warning on mobile devices
-    if (isMobile()) {
-        mobileWarning.style.display = 'flex';
-    } else {
-        mobileWarning.style.display = 'none';
-    }
-    
-    // Handle continue button click
-    continueBtn.addEventListener('click', function() {
-        mobileWarning.classList.add('hidden');
-        // Allow user to proceed with mobile view
-    });
-    
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        if (!isMobile()) {
-            mobileWarning.style.display = 'none';
-        } else if (!mobileWarning.classList.contains('hidden')) {
-            mobileWarning.style.display = 'flex';
-        }
-    });
-}
+// ================================================
+// 🎉 READY!
+// ================================================
 
 console.log('🐄 RStudio Dashboard Loaded! Try clicking on objects in the Environment pane or running code!');
-console.log('💡 Tip: Type resetLayout() in the console to reset the layout to defaults');
 console.log('🎮 New: Play "Feed a Cow" in the top-left pane!');
 console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
