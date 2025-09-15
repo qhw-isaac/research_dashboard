@@ -1034,14 +1034,6 @@ function initCowGallery() {
             date: "July 19, 2025",
             image: "images/Rocky.jpg",
             story: "Rocky was a 4H steer, particularly one showed by the son of the owner of K&M Farms. He was as gentle as can be; the owner mentioned that he is very unaware of his humongous size, and often make way for people that are walking by."
-        },
-        {
-            name: "And Many More to Come!",
-            breed: "",
-            location: "",
-            date: "",
-            image: "images/future-cows.jpg",
-            story: ""
         }
     ];
 
@@ -1084,14 +1076,19 @@ function initCowGallery() {
     function updateCowDisplay() {
         const cow = cowData[currentCowIndex];
         
-        cowImage.src = cow.image;
-        cowImage.alt = cow.name;
+        // Update all text content first for immediate display
         cowName.textContent = cow.name;
         cowBreed.textContent = cow.breed;
         cowLocation.textContent = cow.location;
         cowDate.textContent = cow.date;
         cowStory.textContent = cow.story;
         currentCowSpan.textContent = currentCowIndex + 1;
+        
+        // Update image after text to prevent loading delays
+        if (cow.image) {
+            cowImage.src = cow.image;
+            cowImage.alt = cow.name;
+        }
 
         // Special styling for the final "And Many More to Come!" page
         if (cow.name === "And Many More to Come!") {
@@ -1151,7 +1148,8 @@ function initCowGallery() {
     // Update navigation buttons
     function updateNavigationButtons() {
         prevBtn.disabled = currentCowIndex === 0;
-        nextBtn.disabled = currentCowIndex === totalCows - 1;
+        // Don't disable next button on the last page - allow cycling back to first
+        nextBtn.disabled = false;
     }
 
     // Go to specific cow
@@ -1174,11 +1172,9 @@ function initCowGallery() {
 
     // Next cow
     function nextCow() {
-        if (currentCowIndex < totalCows - 1) {
-            currentCowIndex++;
-            updateCowDisplay();
-            updateNavigationButtons();
-        }
+        currentCowIndex = (currentCowIndex + 1) % totalCows;
+        updateCowDisplay();
+        updateNavigationButtons();
     }
 
     // Event listeners
