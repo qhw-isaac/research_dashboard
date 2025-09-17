@@ -11,7 +11,7 @@ const COW_DATA = [
     {
         name: "3034",
         breed: "Holstein",
-        location: "UBC Dairy Education and Research Centre",
+        location: "UBC Dairy Centre",
         date: "June 30, 2023",
         image: "images/3034.jpg",
         story: "3034 was the calf that pushed me toward graduate studies in animal welfare. She was born premature and nearly swept away by the manure scraper. I happened to be there to save her, but what stayed with me was the sound of cows calling for help while making sure not to trample her. That moment made me realize how little we truly understand cows, and how much we owe them the effort to try."
@@ -23,6 +23,14 @@ const COW_DATA = [
         date: "August 24, 2024",
         image: "images/10.jpg",
         story: "Very funny girl from a farm with a great purpose!"
+    },
+    {
+        name: "Norma",
+        breed: "Angus x Jersey",
+        location: "Shelton, WA",
+        date: "October 13, 2024",
+        image: "images/Norma.jpg",
+        story: "Norma was a very friendly and photogenic cow that I met as part of a trip to Olympic National Park. Her mom, who lives with her, is a milking jersey for the family that we stayed with. She is the first adult dairy-beef cross that I've met!"
     },
     {
         name: "Rocky",
@@ -579,6 +587,12 @@ function showElement(element) {
     if (element) element.style.display = 'flex';
 }
 
+function showElements(elements) {
+    elements.forEach(element => {
+        if (element) element.style.display = 'flex';
+    });
+}
+
 function hideElements(elements) {
     elements.forEach(element => {
         if (element) element.style.display = 'none';
@@ -847,12 +861,113 @@ function initFeedACowGame() {
 // 🖼️ COW GALLERY
 // ================================================
 
+// Global cow gallery state to preserve across workspace switches
+let globalCowIndex = 0;
+let cowGalleryElements = null;
+let cowGalleryInitialized = false;
+
+// Global navigation functions
+function prevCow() {
+    if (!cowGalleryElements) return;
+    if (globalCowIndex > 0) {
+        globalCowIndex--;
+        updateCowDisplay();
+        updateNavigationButtons();
+    }
+}
+
+function nextCow() {
+    if (!cowGalleryElements) return;
+    const totalCows = COW_DATA.length;
+    globalCowIndex = (globalCowIndex + 1) % totalCows;
+    updateCowDisplay();
+    updateNavigationButtons();
+}
+
+function goToCow(index) {
+    if (!cowGalleryElements) return;
+    const totalCows = COW_DATA.length;
+    if (index >= 0 && index < totalCows) {
+        globalCowIndex = index;
+        updateCowDisplay();
+        updateNavigationButtons();
+    }
+}
+
+function updateCowDisplay() {
+    if (!cowGalleryElements) return;
+    const cow = COW_DATA[globalCowIndex];
+    
+    // Update text content
+    cowGalleryElements.cowName.textContent = cow.name;
+    cowGalleryElements.cowBreed.textContent = cow.breed;
+    cowGalleryElements.cowLocation.textContent = cow.location;
+    cowGalleryElements.cowDate.textContent = cow.date;
+    cowGalleryElements.cowStory.textContent = cow.story;
+    cowGalleryElements.currentCowSpan.textContent = globalCowIndex + 1;
+    
+    // Update image
+    if (cow.image) {
+        cowGalleryElements.cowImage.src = cow.image;
+        cowGalleryElements.cowImage.alt = cow.name;
+    }
+
+    // Handle special "And Many More to Come!" page
+    if (cow.name === "And Many More to Come!") {
+        hideElements([cowGalleryElements.cowImage, cowGalleryElements.cowBreed, cowGalleryElements.cowLocation, cowGalleryElements.cowDate, cowGalleryElements.cowStory]);
+        
+        Object.assign(cowGalleryElements.cowName.style, {
+            color: "#ffdb77",
+            fontSize: "56px",
+            fontWeight: "800",
+            textAlign: "center",
+            width: "100%",
+            position: "absolute",
+            top: "37%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            textShadow: "0 0 20px rgba(255, 219, 119, 0.5)",
+            letterSpacing: "2px",
+            fontFamily: "'Poppins', sans-serif"
+        });
+    } else {
+        // Reset to normal styling
+        showElements([cowGalleryElements.cowImage, cowGalleryElements.cowBreed, cowGalleryElements.cowLocation, cowGalleryElements.cowDate, cowGalleryElements.cowStory]);
+        
+        Object.assign(cowGalleryElements.cowName.style, {
+            color: "#ffffff",
+            fontSize: "20px",
+            fontWeight: "600",
+            width: "auto",
+            position: "static",
+            top: "auto",
+            left: "auto",
+            transform: "none",
+            textShadow: "none",
+            letterSpacing: "normal",
+            fontFamily: "'JetBrains Mono', monospace"
+        });
+    }
+
+    // Update dots
+    const dots = cowGalleryElements.galleryDots.querySelectorAll('.gallery-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === globalCowIndex);
+    });
+}
+
+function updateNavigationButtons() {
+    if (!cowGalleryElements) return;
+    cowGalleryElements.prevBtn.disabled = globalCowIndex === 0;
+    cowGalleryElements.nextBtn.disabled = false; // Allow cycling
+}
+
 function initCowGallery() {
-    let currentCowIndex = 0;
+    // Always refresh DOM element references
     const totalCows = COW_DATA.length;
 
-    // Get DOM elements
-    const elements = {
+    // Update global element references
+    cowGalleryElements = {
         cowImage: document.getElementById('cow-image'),
         cowName: document.getElementById('cow-name'),
         cowBreed: document.getElementById('cow-breed'),
@@ -867,127 +982,48 @@ function initCowGallery() {
     };
 
     function initGallery() {
-        elements.totalCowsSpan.textContent = totalCows;
+        cowGalleryElements.totalCowsSpan.textContent = totalCows;
         createDots();
         updateCowDisplay();
         updateNavigationButtons();
     }
 
     function createDots() {
-        elements.galleryDots.innerHTML = '';
+        cowGalleryElements.galleryDots.innerHTML = '';
         for (let i = 0; i < totalCows; i++) {
             const dot = document.createElement('div');
-            dot.className = `gallery-dot ${i === currentCowIndex ? 'active' : ''}`;
+            dot.className = `gallery-dot ${i === globalCowIndex ? 'active' : ''}`;
             dot.addEventListener('click', () => goToCow(i));
-            elements.galleryDots.appendChild(dot);
+            cowGalleryElements.galleryDots.appendChild(dot);
         }
     }
 
-    function updateCowDisplay() {
-        const cow = COW_DATA[currentCowIndex];
+    // Event listeners (only set up once)
+    if (!cowGalleryInitialized) {
+        cowGalleryInitialized = true;
         
-        // Update text content
-        elements.cowName.textContent = cow.name;
-        elements.cowBreed.textContent = cow.breed;
-        elements.cowLocation.textContent = cow.location;
-        elements.cowDate.textContent = cow.date;
-        elements.cowStory.textContent = cow.story;
-        elements.currentCowSpan.textContent = currentCowIndex + 1;
-        
-        // Update image
-        if (cow.image) {
-            elements.cowImage.src = cow.image;
-            elements.cowImage.alt = cow.name;
-        }
-
-        // Handle special "And Many More to Come!" page
-        if (cow.name === "And Many More to Come!") {
-            hideElements([elements.cowImage, elements.cowBreed, elements.cowLocation, elements.cowDate, elements.cowStory]);
-            
-            Object.assign(elements.cowName.style, {
-                color: "#ffdb77",
-                fontSize: "56px",
-                fontWeight: "800",
-                textAlign: "center",
-                width: "100%",
-                position: "absolute",
-                top: "37%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                textShadow: "0 0 20px rgba(255, 219, 119, 0.5)",
-                letterSpacing: "2px",
-                fontFamily: "'Poppins', sans-serif"
-            });
-        } else {
-            // Reset to normal styling
-            showElements([elements.cowImage, elements.cowBreed, elements.cowLocation, elements.cowDate, elements.cowStory]);
-            
-            Object.assign(elements.cowName.style, {
-                color: "#ffffff",
-                fontSize: "20px",
-                fontWeight: "600",
-                width: "auto",
-                position: "static",
-                top: "auto",
-                left: "auto",
-                transform: "none",
-                textShadow: "none",
-                letterSpacing: "normal",
-                fontFamily: "'JetBrains Mono', monospace"
-            });
-        }
-
-        // Update dots
-        const dots = elements.galleryDots.querySelectorAll('.gallery-dot');
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentCowIndex);
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const galleryContainer = document.getElementById('cow-gallery-container');
+            if (galleryContainer && galleryContainer.style.display !== 'none') {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevCow();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextCow();
+                }
+            }
         });
     }
 
-    function updateNavigationButtons() {
-        elements.prevBtn.disabled = currentCowIndex === 0;
-        elements.nextBtn.disabled = false; // Allow cycling
+    // Set up button event listeners (always refresh these since DOM elements change)
+    if (cowGalleryElements.prevBtn) {
+        cowGalleryElements.prevBtn.onclick = prevCow;
     }
-
-    function goToCow(index) {
-        if (index >= 0 && index < totalCows) {
-            currentCowIndex = index;
-            updateCowDisplay();
-            updateNavigationButtons();
-        }
+    if (cowGalleryElements.nextBtn) {
+        cowGalleryElements.nextBtn.onclick = nextCow;
     }
-
-    function prevCow() {
-        if (currentCowIndex > 0) {
-            currentCowIndex--;
-            updateCowDisplay();
-            updateNavigationButtons();
-        }
-    }
-
-    function nextCow() {
-        currentCowIndex = (currentCowIndex + 1) % totalCows;
-        updateCowDisplay();
-        updateNavigationButtons();
-    }
-
-    // Event listeners
-    elements.prevBtn.addEventListener('click', prevCow);
-    elements.nextBtn.addEventListener('click', nextCow);
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        const galleryContainer = document.getElementById('cow-gallery-container');
-        if (galleryContainer && galleryContainer.style.display !== 'none') {
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                prevCow();
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                nextCow();
-            }
-        }
-    });
 
     initGallery();
 }
@@ -1180,4 +1216,5 @@ document.head.appendChild(style);
 
 console.log('🐄 RStudio Dashboard Loaded! Try clicking on objects in the Environment pane or running code!');
 console.log('🎮 New: Play "Feed a Cow" in the top-left pane!');
+console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
 console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
