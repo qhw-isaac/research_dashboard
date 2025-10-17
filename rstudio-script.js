@@ -135,6 +135,8 @@ const GAME_CONFIG = {
     pointsPerCow: 10
 };
 
+// ⏰ TIME TRACKER DATA is now in time-tracker-data.js
+
 // ================================================
 // 🚀 INITIALIZATION
 // ================================================
@@ -143,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Starting dashboard initialization...');
     try {
         setupMobileWarning();
-    initializeChart();
+    // initializeChart(); // Moved to lazy loading in setupPlotsTabSwitching
     setupTabSwitching();
     setupObjectInteractions();
     setupConsoleSimulation();
@@ -152,6 +154,8 @@ document.addEventListener('DOMContentLoaded', function() {
         setupLightweightAffordances();
         setupEnvironmentTabs();
         setupEnvCategoryClicks();
+        setupPlotsTabSwitching();
+        initTimeTracker();
     initFeedACowGame();
         initCowGallery();
         console.log('🎉 Dashboard initialization complete!');
@@ -478,7 +482,8 @@ function addConsoleCommand(command) {
 // ================================================
 
 function initializeChart() {
-    const ctx = document.getElementById('cowBehaviorChart').getContext('2d');
+    const ctx = document.getElementById('cowBehaviorChart');
+    if (!ctx) return;
     
     new Chart(ctx, {
         type: 'bar',
@@ -503,6 +508,14 @@ function initializeChart() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: false,
+            transitions: {
+                active: {
+                    animation: {
+                        duration: 0
+                    }
+                }
+            },
             plugins: {
                 title: {
                     display: true,
@@ -1211,10 +1224,98 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ================================================
+// ⏰ TIME TRACKER FUNCTIONALITY
+// ================================================
+
+function initTimeTracker() {
+    const container = document.getElementById('thermometer-container');
+    const weekDateSpan = document.getElementById('current-week-date');
+    const lastUpdatedSpan = document.getElementById('last-updated');
+    const totalHoursSpan = document.getElementById('total-hours-display');
+    
+    if (!container || !TIME_TRACKER_CONFIG) return;
+    
+    // Update dates
+    if (weekDateSpan) {
+        weekDateSpan.textContent = TIME_TRACKER_CONFIG.weekOf;
+    }
+    if (lastUpdatedSpan) {
+        lastUpdatedSpan.textContent = TIME_TRACKER_CONFIG.lastUpdated;
+    }
+    
+    // Calculate and display total hours
+    const totalHours = TIME_TRACKER_CONFIG.activities.reduce((sum, activity) => sum + activity.hours, 0);
+    if (totalHoursSpan) {
+        totalHoursSpan.textContent = totalHours.toFixed(1);
+    }
+    
+    // Create thermometer bars
+    container.innerHTML = '';
+    const maxHours = TIME_TRACKER_CONFIG.maxHours;
+    
+    TIME_TRACKER_CONFIG.activities.forEach(activity => {
+        const thermometer = document.createElement('div');
+        thermometer.className = 'thermometer';
+        
+        const fillPercentage = (activity.hours / maxHours) * 100;
+        
+        thermometer.innerHTML = `
+            <div class="thermometer-name">${activity.name}</div>
+            <div class="thermometer-tube">
+                <div class="thermometer-fill" style="height: ${fillPercentage}%; background: ${activity.color}"></div>
+            </div>
+            <div class="thermometer-hours">${activity.hours}h</div>
+        `;
+        
+        container.appendChild(thermometer);
+    });
+}
+
+// ================================================
+// 📊 PLOTS TAB SWITCHING
+// ================================================
+
+let chartInitialized = false; // Track if chart has been initialized
+
+function setupPlotsTabSwitching() {
+    const plotsTabs = document.querySelectorAll('.plots-tabs .tab[data-plot-tab]');
+    const contentPanes = {
+        'this-week': document.getElementById('this-week-content'),
+        'plots': document.getElementById('plots-content')
+    };
+    
+    plotsTabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const tabId = this.getAttribute('data-plot-tab');
+            
+            // Update active tab
+            plotsTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show appropriate content
+            Object.keys(contentPanes).forEach(key => {
+                if (contentPanes[key]) {
+                    contentPanes[key].style.display = (key === tabId) ? 'flex' : 'none';
+                }
+            });
+            
+            // Lazy load chart when Plots tab is first clicked
+            if (tabId === 'plots' && !chartInitialized) {
+                chartInitialized = true;
+                initializeChart();
+            }
+        });
+    });
+}
+
+// ================================================
 // 🎉 READY!
 // ================================================
 
 console.log('🐄 RStudio Dashboard Loaded! Try clicking on objects in the Environment pane or running code!');
 console.log('🎮 New: Play "Feed a Cow" in the top-left pane!');
 console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
-console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
+console.log('⏰ New: Track your weekly hours in the "This Week" tab!');

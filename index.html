@@ -437,17 +437,32 @@
                 <!-- Bottom Right: Plots/Files -->
                 <div class="pane plots-pane">
                 <div class="pane-header">
-                    <div class="pane-tabs">
-                        <div class="tab active">Plots</div>
-                        <div class="tab">Files</div>
-                        <div class="tab">Packages</div>
-                        <div class="tab">Help</div>
-                        <div class="tab">Viewer</div>
+                    <div class="pane-tabs plots-tabs">
+                        <div class="tab active" data-plot-tab="this-week">This Week</div>
+                        <div class="tab" data-plot-tab="plots">Plots</div>
                     </div>
                     <div class="pane-toolbar"></div>
                 </div>
                 <div class="pane-content">
-                    <div class="plots-content">
+                    <!-- This Week Content -->
+                    <div class="this-week-content" id="this-week-content">
+                        <div class="week-header-title">
+                            <div class="header-left">
+                                <h3>Time Tracker (hours)</h3>
+                                <div class="week-subtitle">Week of <span id="current-week-date">Oct 13-19, 2025</span></div>
+                            </div>
+                            <div class="total-hours">Total: <span id="total-hours-display">0</span>h</div>
+                        </div>
+                        <div class="thermometer-container" id="thermometer-container">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        <div class="tracker-footer">
+                            <p>Last updated: <span id="last-updated">Sunday, October 19, 2025</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Plots Content -->
+                    <div class="plots-content" id="plots-content" style="display: none;">
                         <div class="plot-container">
                             <canvas id="cowBehaviorChart" width="400" height="300"></canvas>
                         </div>
@@ -476,6 +491,7 @@
         </div>
     </div>
 
+    <script src="time-tracker-data.js"></script>
     <script src="rstudio-script.js"></script>
 </body>
 </html>
