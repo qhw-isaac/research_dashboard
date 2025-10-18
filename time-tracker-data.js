@@ -3,12 +3,12 @@
 
 const TIME_TRACKER_CONFIG = {
     weekOf: "Oct 13-19, 2025",
-    lastUpdated: "1:15 PM, October 17, 2025",
-    maxHours: 22, // Maximum hours for the tallest bar (round up from 20.8)
+    lastUpdated: "11:23 PM, October 17, 2025",
+    maxHours: 30, // Maximum hours for the tallest bar (round up from 20.8)
     activities: [
         { 
             name: "Economics", 
-            hours: 20.8, 
+            hours: 23, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 
@@ -23,19 +23,18 @@ const TIME_TRACKER_CONFIG = {
         },
         { 
             name: "Computer Science", 
-            hours: 1.2, 
+            hours: 3.02, 
             color: "#3a9d9d" // Bright teal/terminal cyan - code, tech, digital age meets tradition
         },
         { 
             name: "Mathematics", 
-            hours: 0.28, 
+            hours: 0.35, 
             color: "#6e87a8" // Cool slate blue - logic, precision, geometric elegance
         },
         { 
             name: "Greek", 
-            hours: 0.18, 
+            hours: 0.28, 
             color: "#b07652" // Warm terracotta/burnt sienna - ancient pottery, classical scrolls, aged clay
         }
     ]
 };
-
