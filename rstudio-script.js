@@ -1235,6 +1235,9 @@ function initTimeTracker() {
     
     if (!container || !TIME_TRACKER_CONFIG) return;
     
+    // Set data-count attribute for CSS responsive behavior
+    container.setAttribute('data-count', TIME_TRACKER_CONFIG.activities.length);
+    
     // Update dates
     if (weekDateSpan) {
         weekDateSpan.textContent = TIME_TRACKER_CONFIG.weekOf;

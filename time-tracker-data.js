@@ -1,39 +1,46 @@
 // ⏰ TIME TRACKER DATA
-// Update this file weekly with your hours
+
+// Previous week colors (Oct 13-19, 2025):
+// Computer Science: #3a9d9d (Bright teal/terminal cyan)
+// Greek: #b07652 (Warm terracotta/burnt sienna)
+// Pedagogy: #8ba68c (Soft sage)
+
+// Current week colors (Oct 20-26, 2025):
+// Economics: #c99a4d (Bright amber/old gold) - carried over
+// Pedagogy: #8ba68c (Soft sage) - carried over  
+// Animal Welfare: #5d8a5d (Vibrant forest green) - carried over
+// Computer Science: #3a9d9d (Bright teal/terminal cyan) - carried over
+// Mathematics: #6e87a8 (Cool slate blue) - carried over
+// Greek: #b07652 (Warm terracotta/burnt sienna) - carried over
 
 const TIME_TRACKER_CONFIG = {
-    weekOf: "Oct 13-19, 2025",
-    lastUpdated: "11:23 PM, October 17, 2025",
-    maxHours: 30, // Maximum hours for the tallest bar (round up from 20.8)
+    weekOf: "Oct 20-26, 2025",
+    lastUpdated: "10:44 AM, October 22, 2025",
+    maxHours: 20, // Maximum hours for the tallest bar (round up from 14.78)
     activities: [
         { 
             name: "Economics", 
-            hours: 23, 
+            hours: 14.78, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 
-            name: "Pedagogy", 
-            hours: 5.32, 
+            name: "Leadership", 
+            hours: 2.62, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
-            name: "Animal Welfare", 
-            hours: 4.75, 
-            color: "#5d8a5d" // Vibrant forest green - nature, earth, conservation
-        },
-        { 
-            name: "Computer Science", 
-            hours: 3.02, 
-            color: "#3a9d9d" // Bright teal/terminal cyan - code, tech, digital age meets tradition
-        },
-        { 
             name: "Mathematics", 
-            hours: 0.35, 
+            hours: 1.05, 
             color: "#6e87a8" // Cool slate blue - logic, precision, geometric elegance
         },
         { 
-            name: "Greek", 
-            hours: 0.28, 
+            name: "Animal Welfare", 
+            hours: 0.93, 
+            color: "#5d8a5d" // Vibrant forest green - nature, earth, conservation
+        },
+        { 
+            name: "French", 
+            hours: 0.08, 
             color: "#b07652" // Warm terracotta/burnt sienna - ancient pottery, classical scrolls, aged clay
         }
     ]
