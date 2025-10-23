@@ -15,18 +15,13 @@
 
 const TIME_TRACKER_CONFIG = {
     weekOf: "Oct 20-26, 2025",
-    lastUpdated: "10:44 AM, October 22, 2025",
-    maxHours: 20, // Maximum hours for the tallest bar (round up from 14.78)
+    lastUpdated: "1:07 PM, October 23, 2025",
+    maxHours: 30, // Maximum hours for the tallest bar (round up from 28.33)
     activities: [
         { 
             name: "Economics", 
-            hours: 14.78, 
+            hours: 28.33, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
-        },
-        { 
-            name: "Leadership", 
-            hours: 2.62, 
-            color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
             name: "Mathematics", 
@@ -42,6 +37,11 @@ const TIME_TRACKER_CONFIG = {
             name: "French", 
             hours: 0.08, 
             color: "#b07652" // Warm terracotta/burnt sienna - ancient pottery, classical scrolls, aged clay
+        },
+        { 
+            name: "Leadership", 
+            hours: 2.62, 
+            color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         }
     ]
 };
