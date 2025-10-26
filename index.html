@@ -28,8 +28,6 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                </li>
-                <li class="nav-item">
                     <a>Research Dashboard</a>
                 </li>
             </ul>
@@ -41,7 +39,7 @@
         <!-- Top Menu Bar -->
         <div class="menu-bar">
             <div class="menu-left">
-                <span class="menu-item">RStudio</span>
+                <span class="menu-item">QStudio</span>
                 <span class="menu-item">File</span>
                 <span class="menu-item">Edit</span>
                 <span class="menu-item">Code</span>
@@ -83,21 +81,6 @@
                         <div class="tab" data-tab="feed-a-cow">
                             <i class="fas fa-cow"></i>
                             <span>Feed a Cow!</span>
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div class="tab" data-tab="cow-welfare-analysis">
-                            <i class="fas fa-code"></i>
-                            <span>cow_welfare_analysis.R</span>
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div class="tab" data-tab="data-visualization">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>data_visualization.R</span>
-                            <i class="fas fa-times"></i>
-                        </div>
-                        <div class="tab" data-tab="statistical-models">
-                            <i class="fas fa-calculator"></i>
-                            <span>statistical_models.R</span>
                             <i class="fas fa-times"></i>
                         </div>
                     </div>
@@ -199,161 +182,6 @@
                             <p>⏰ You have 30 seconds to feed as many cows as possible!</p>
                         </div>
                     </div>
-                    
-                    <!-- Hidden Code Editors (for other tabs) -->
-                    <div class="code-editor" id="cow-welfare-analysis" style="display: none;">
-                        <div class="line-numbers">
-                            <div class="line-number">1</div>
-                            <div class="line-number">2</div>
-                            <div class="line-number">3</div>
-                            <div class="line-number">4</div>
-                            <div class="line-number">5</div>
-                            <div class="line-number">6</div>
-                            <div class="line-number">7</div>
-                            <div class="line-number">8</div>
-                            <div class="line-number">9</div>
-                            <div class="line-number">10</div>
-                            <div class="line-number">11</div>
-                            <div class="line-number">12</div>
-                            <div class="line-number">13</div>
-                            <div class="line-number">14</div>
-                            <div class="line-number">15</div>
-                            <div class="line-number">16</div>
-                            <div class="line-number">17</div>
-                            <div class="line-number">18</div>
-                            <div class="line-number">19</div>
-                            <div class="line-number">20</div>
-                        </div>
-                        <div class="code-content editable" contenteditable="true" spellcheck="false">
-                            <div class="code-line"><span class="comment"># AMS x PRT Research Analysis</span></div>
-                            <div class="code-line"><span class="comment"># Automated Milking System & Positive Reinforcement Training</span></div>
-                            <div class="code-line"><span class="comment"># Isaac Qi - UBC Animal Welfare Program</span></div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"dplyr"</span>)</div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"ggplot2"</span>)</div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"lme4"</span>)</div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"lmerTest"</span>)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Load processed AMS data</span></div>
-                            <div class="code-line">max_step_MVI <- <span class="keyword">read_csv</span>(<span class="string">"data/processed/02_outliers_removed.csv"</span>)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Mixed effects model for visit intervals</span></div>
-                            <div class="code-line">model <- <span class="keyword">lmer</span>(</div>
-                            <div class="code-line">  max_interval ~ study_day + max_step_score +</div>
-                            <div class="code-line">    parity_group + max_interval_lag1 + pen +</div>
-                            <div class="code-line">    (<span class="number">1</span> | cow_id),</div>
-                            <div class="code-line">  data = max_step_MVI, REML = <span class="keyword">TRUE</span></div>
-                            <div class="code-line">)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Model diagnostics and results</span></div>
-                            <div class="code-line"><span class="keyword">summary</span>(model)</div>
-                            <div class="code-line"><span class="keyword">anova</span>(model, type = <span class="number">3</span>)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="code-editor" id="data-visualization" style="display: none;">
-                        <div class="line-numbers">
-                            <div class="line-number">1</div>
-                            <div class="line-number">2</div>
-                            <div class="line-number">3</div>
-                            <div class="line-number">4</div>
-                            <div class="line-number">5</div>
-                            <div class="line-number">6</div>
-                            <div class="line-number">7</div>
-                            <div class="line-number">8</div>
-                            <div class="line-number">9</div>
-                            <div class="line-number">10</div>
-                            <div class="line-number">11</div>
-                            <div class="line-number">12</div>
-                            <div class="line-number">13</div>
-                            <div class="line-number">14</div>
-                            <div class="line-number">15</div>
-                            <div class="line-number">16</div>
-                            <div class="line-number">17</div>
-                            <div class="line-number">18</div>
-                            <div class="line-number">19</div>
-                            <div class="line-number">20</div>
-                        </div>
-                        <div class="code-content editable" contenteditable="true" spellcheck="false">
-                            <div class="code-line"><span class="comment"># AMS Visit Interval Visualization</span></div>
-                            <div class="code-line"><span class="comment"># Treatment vs Control Comparison</span></div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"ggplot2"</span>)</div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"emmeans"</span>)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Load weekly aggregated data</span></div>
-                            <div class="code-line">pen2_weekly <- cow_data %>%</div>
-                            <div class="code-line">  <span class="keyword">filter</span>(pen == <span class="number">2</span>) %>%</div>
-                            <div class="code-line">  <span class="keyword">mutate</span>(</div>
-                            <div class="code-line">    week = <span class="keyword">case_when</span>(</div>
-                            <div class="code-line">      day %in% <span class="number">1</span>:<span class="number">7</span>   ~ <span class="string">"Week 1"</span>,</div>
-                            <div class="code-line">      day %in% <span class="number">8</span>:<span class="number">14</span>  ~ <span class="string">"Week 2"</span>,</div>
-                            <div class="code-line">      day %in% <span class="number">15</span>:<span class="number">21</span> ~ <span class="string">"Week 3"</span>,</div>
-                            <div class="code-line">      day %in% <span class="number">22</span>:<span class="number">28</span> ~ <span class="string">"Week 4"</span></div>
-                            <div class="code-line">    )</div>
-                            <div class="code-line">  )</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Mixed-effects model for weekly analysis</span></div>
-                            <div class="code-line">fit <- <span class="keyword">lmer</span>(</div>
-                            <div class="code-line">  avg_max_interval ~ treatment * week + (<span class="number">1</span> | cow_id),</div>
-                            <div class="code-line">  data = pen2_weekly, REML = <span class="keyword">TRUE</span></div>
-                            <div class="code-line">)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Create violin plot with statistical labels</span></div>
-                            <div class="code-line">fig_1 <- <span class="keyword">ggplot</span>(pen2_weekly, <span class="keyword">aes</span>(x = week, y = avg_max_interval)) +</div>
-                            <div class="code-line">  <span class="keyword">geom_violin</span>(<span class="keyword">aes</span>(fill = treatment), alpha = <span class="number">0.3</span>) +</div>
-                            <div class="code-line">  <span class="keyword">geom_point</span>(<span class="keyword">aes</span>(color = treatment), position = <span class="string">"jitter"</span>) +</div>
-                            <div class="code-line">  <span class="keyword">labs</span>(title = <span class="string">"AMS Visit Intervals by Treatment"</span>)</div>
-                        </div>
-                    </div>
-                    
-                    <div class="code-editor" id="statistical-models" style="display: none;">
-                        <div class="line-numbers">
-                            <div class="line-number">1</div>
-                            <div class="line-number">2</div>
-                            <div class="line-number">3</div>
-                            <div class="line-number">4</div>
-                            <div class="line-number">5</div>
-                            <div class="line-number">6</div>
-                            <div class="line-number">7</div>
-                            <div class="line-number">8</div>
-                            <div class="line-number">9</div>
-                            <div class="line-number">10</div>
-                            <div class="line-number">11</div>
-                            <div class="line-number">12</div>
-                            <div class="line-number">13</div>
-                            <div class="line-number">14</div>
-                            <div class="line-number">15</div>
-                            <div class="line-number">16</div>
-                            <div class="line-number">17</div>
-                            <div class="line-number">18</div>
-                            <div class="line-number">19</div>
-                            <div class="line-number">20</div>
-                        </div>
-                        <div class="code-content editable" contenteditable="true" spellcheck="false">
-                            <div class="code-line"><span class="comment"># Statistical Model Diagnostics</span></div>
-                            <div class="code-line"><span class="comment"># Mixed Effects Model Validation</span></div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"lme4"</span>)</div>
-                            <div class="code-line"><span class="keyword">library</span>(<span class="string">"MuMIn"</span>)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Model diagnostics plots</span></div>
-                            <div class="code-line"><span class="keyword">par</span>(mfrow = <span class="keyword">c</span>(<span class="number">2</span>, <span class="number">2</span>))</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Residuals vs Fitted</span></div>
-                            <div class="code-line"><span class="keyword">plot</span>(<span class="keyword">fitted</span>(model), <span class="keyword">resid</span>(model),</div>
-                            <div class="code-line">     main = <span class="string">"Residuals vs Fitted"</span>,</div>
-                            <div class="code-line">     xlab = <span class="string">"Fitted values"</span>, ylab = <span class="string">"Residuals"</span>)</div>
-                            <div class="code-line"><span class="keyword">abline</span>(h = <span class="number">0</span>, lty = <span class="number">2</span>)</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Q-Q Plot</span></div>
-                            <div class="code-line"><span class="keyword">qqnorm</span>(<span class="keyword">resid</span>(model), main = <span class="string">"Normal Q-Q: Residuals"</span>)</div>
-                            <div class="code-line"><span class="keyword">qqline</span>(<span class="keyword">resid</span>(model))</div>
-                            <div class="code-line"></div>
-                            <div class="code-line"><span class="comment"># Model summary and R-squared</span></div>
-                            <div class="code-line"><span class="keyword">r.squaredGLMM</span>(model)</div>
-                        </div>
-                    </div>
                 </div>
                 </div>
 
@@ -368,10 +196,8 @@
                 </div>
                 <div class="pane-content">
                     <div class="console-output">
-                        <div class="console-line">Copyright (C) 2024 The R Foundation for Statistical Computing</div>
                         <div class="console-line"></div>
-                        <div class="console-line">R is free software and comes with ABSOLUTELY NO WARRANTY.</div>
-                        <div class="console-line">You are welcome to redistribute it under certain conditions.</div>
+                        <div class="console-line">Copyright (C) 2025 Isaac Qi</div>
                         <div class="console-line"></div>
                         <div class="console-line">> <span class="cursor">|</span></div>
                     </div>
@@ -398,17 +224,10 @@
                         <div class="environment-objects">
                             <div class="object-item category" data-category="animal-welfare"><span class="object-name">Animal Welfare</span><span class="object-type">category</span><span class="object-size">—</span></div>
                             <div class="object-item category" data-category="economics"><span class="object-name">Economics</span><span class="object-type">category</span><span class="object-size">—</span></div>
-                            <div class="object-item category" data-category="leadership"><span class="object-name">Leadership</span><span class="object-type">category</span><span class="object-size">—</span></div>
-                            <div class="object-item category" data-category="dog-grooming"><span class="object-name">Dog Grooming</span><span class="object-type">category</span><span class="object-size">—</span></div>
                         </div>
                     </div>
                     <div class="environment-content" id="about-pane" data-pane="about" style="display:none;">
                         <div class="environment-objects">
-                            <div class="object-item">
-                                <span class="object-name">readme</span>
-                                <span class="object-type">just.do.it</span>
-                                <span class="object-size">1 × 1</span>
-                            </div>
                             <div class="object-item">
                                 <span class="object-name">mission</span>
                                 <span class="object-type">character</span>
@@ -439,7 +258,8 @@
                 <div class="pane-header">
                     <div class="pane-tabs plots-tabs">
                         <div class="tab active" data-plot-tab="this-week">This Week</div>
-                        <div class="tab" data-plot-tab="plots">Plots</div>
+                        <div class="tab" data-plot-tab="lifetime">Lifetime</div>
+                        <div class="tab" data-plot-tab="plots">AMS x PRT</div>
                     </div>
                     <div class="pane-toolbar"></div>
                 </div>
@@ -458,6 +278,23 @@
                         </div>
                         <div class="tracker-footer">
                             <p>Last updated: <span id="last-updated">Sunday, October 19, 2025</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Lifetime Content -->
+                    <div class="lifetime-content" id="lifetime-content" style="display: none;">
+                        <div class="week-header-title">
+                            <div class="header-left">
+                                <h3>Time Tracker</h3>
+                                <div class="week-subtitle">Beginning <span id="lifetime-start-date">January 1, 2025</span></div>
+                            </div>
+                            <div class="total-hours">Total: <span id="lifetime-total-hours-display">0</span>h</div>
+                        </div>
+                        <div class="thermometer-container" id="lifetime-thermometer-container">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                        <div class="tracker-footer">
+                            <p>Last updated: <span id="lifetime-last-updated">Oct 25, 2025</span></p>
                         </div>
                     </div>
                     
@@ -491,7 +328,11 @@
         </div>
     </div>
 
-    <script src="time-tracker-data.js"></script>
+    <script src="cow-gallery/cow-data.js"></script>
+    <script src="content/time-tracker-data.js"></script>
+    <script src="content/lifetime-data.js"></script>
+    <script src="content/animal-welfare.js"></script>
+    <script src="content/economics.js"></script>
     <script src="rstudio-script.js"></script>
 </body>
 </html>

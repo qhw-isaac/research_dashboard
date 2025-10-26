@@ -434,7 +434,13 @@ body {
     overflow-x: hidden;
 }
 
-/* Removed .code-editor.hidden - using inline styles instead */
+/* ================================================
+   CODE EDITOR STYLES - Saved for Future Use
+   ================================================
+   These styles are for code editor tabs with line numbers.
+   Currently not in use but retained for future features.
+   See workspace switching functionality in rstudio-script.js
+   ================================================ */
 
 .line-numbers {
     background: #252526;
@@ -1030,7 +1036,8 @@ body {
 }
 
 .plots-content,
-.this-week-content {
+.this-week-content,
+.lifetime-content {
     height: 100%;
     width: 100%;
     display: flex;
@@ -1039,7 +1046,8 @@ body {
 }
 
 /* Time Tracker Styles - Modern Dark Design */
-.this-week-content {
+.this-week-content,
+.lifetime-content {
     padding: 15px;
     background: #1e1e1e;
     border-radius: 8px;

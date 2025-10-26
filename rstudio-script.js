@@ -6,41 +6,7 @@
 // 📝 CONTENT CONFIGURATION - EDIT THESE SECTIONS
 // ================================================
 
-// 🐄 COW GALLERY DATA - Add/edit your cows here
-const COW_DATA = [
-    {
-        name: "3034",
-        breed: "Holstein",
-        location: "UBC Dairy Centre",
-        date: "June 30, 2023",
-        image: "images/3034.jpg",
-        story: "3034 was the calf that pushed me toward graduate studies in animal welfare. She was born premature and nearly swept away by the manure scraper. I happened to be there to save her, but what stayed with me was the sound of cows calling for help while making sure not to trample her. That moment made me realize how little we truly understand cows, and how much we owe them the effort to try."
-    },
-    {
-        name: "10",
-        breed: "Water Buffalo",
-        location: "Academy Farms",
-        date: "August 24, 2024",
-        image: "images/10.jpg",
-        story: "Very funny girl from a farm with a great purpose!"
-    },
-    {
-        name: "Norma",
-        breed: "Angus x Jersey",
-        location: "Shelton, WA",
-        date: "October 13, 2024",
-        image: "images/Norma.jpg",
-        story: "Norma was a very friendly and photogenic cow that I met as part of a trip to Olympic National Park. Her mom, who lives with her, is a milking jersey for the family that we stayed with. She is the first adult dairy-beef cross that I've met!"
-    },
-    {
-        name: "Rocky",
-        breed: "Hereford",
-        location: "K&M Farms",
-        date: "July 19, 2025",
-        image: "images/Rocky.jpg",
-        story: "Rocky was a 4H steer, particularly one showed by the son of the owner of K&M Farms. He was as gentle as can be; the owner mentioned that he is very unaware of his humongous size, and often make way for people that are walking by."
-    }
-];
+// 🐄 COW GALLERY DATA is now in cow-gallery/cow-data.js
 
 // 🔬 RESEARCH CHART DATA - Customize your chart
 const CHART_CONFIG = {
@@ -56,30 +22,17 @@ const CHART_CONFIG = {
 const CONSOLE_MESSAGES = {
     welcome: [
         '> Hello.',
-        '> Welcome to my research dashboard.',
-        '> I wonder if we can train cows to udder-stand robots?',
-        '> 181 cows enrolled...'
+        '> Welcome to my research dashboard.'
     ],
     execution: [
-        '> source("cow_welfare_analysis.R")',
-        'Loading required package: ggplot2',
-        'Loading required package: dplyr',
-        'Loading required package: lme4',
-        'Loading required package: lmerTest',
-        'Loading required package: MuMIn',
-        '> Cows walking towards the robot... 🐄🤖',
-        '> Analyzing visit intervals... ⏰',
-        '> PRT training showing positive results! 🌾',
-        '> Mixed effects model running... 📊',
-        '> Treatment group adapting faster! ⚡',
-        '> Model diagnostics complete! ✅',
-        'Analysis complete! Check the Plots tab for visualization.'
+        '> Connecting to barn WiFi... 📡',
+        'Error: Cow stepped on router. Retrying...',
+        'Connection established! 🐄✨'
     ]
 };
 
 // 📋 OBJECT DETAILS - Environment pane object descriptions
 const OBJECT_DETAILS = {
-    'readme': `Environment tabs are clickable as well as the top left R tabs. Feed a Cow! game is playable and has sounds!`,
     'mission': `chr "Making dairy cow lives incrementally better over time"<br><br>
 This represents my core motivation and the driving force behind my research. 
 Every study, every analysis, every day spent in the field is guided by this 
@@ -87,39 +40,12 @@ simple goal: improving the welfare and quality of life for dairy cattle.`,
     'field_of_study': `chr "Master of Food and Resource Economics at the University of British Columbia"`,
     'current_status': `chr "At the first Vancouver community Cursor Workshop!"`,
     'Animal Welfare': `Switching to Animal Welfare...`,
-    'Economics': `Switching to Economics...`,
-    'Leadership': `Switching to Leadership...`,
-    'Dog Grooming': `Switching to Dog Grooming...`
+    'Economics': `Switching to Economics...`
 };
 
-// 🏢 WORKSPACE CONTENT - Edit content for different workspace modes
-const WORKSPACE_CONTENT = {
-    economics: {
-        title: "Now showing Economics information",
-        description: "Market signals, price elasticity, and resource allocation meet the barn. This is a playful placeholder to explore how economics intersects with animal agriculture.",
-        tabs: [
-            { id: "econ-overview", icon: "fas fa-chart-line", name: "Econ Overview", content: "" },
-            { id: "macro-trends", icon: "fas fa-globe", name: "macro_trends.R", content: "# macro_trends.R\nsummary(cows)\nplot(week, price_index)" },
-            { id: "micro-pricing", icon: "fas fa-tags", name: "micro_pricing.R", content: "# micro_pricing.R\nprice <- supply_demand_intersect()\nprint(price)" }
-        ]
-    },
-    leadership: {
-        title: "Leadership in Animal Welfare",
-        description: "Leading initiatives for positive change in animal care and advocacy.",
-        tabs: [
-            { id: "paw", icon: "", name: "PAW", content: "Coming soon..." },
-            { id: "ubc-quadball", icon: "", name: "UBC TSC Quadball", content: "Coming soon..." },
-            { id: "lfs-gss", icon: "", name: "LFS GSS", content: "Coming soon..." }
-        ]
-    },
-    dogGrooming: {
-        title: "My Dog Grooming Portfolio",
-        description: "Showcasing skills in canine care and styling. A passion project!",
-        tabs: [
-            { id: "portfolio", icon: "", name: "Portfolio", content: "Portfolio coming soon..." }
-        ]
-    }
-};
+// 🏢 WORKSPACE CONTENT is now in separate files:
+// - content/animal-welfare.js
+// - content/economics.js
 
 // 📞 CONTACT INFO - Update your contact details
 const CONTACT_INFO = {
@@ -135,7 +61,7 @@ const GAME_CONFIG = {
     pointsPerCow: 10
 };
 
-// ⏰ TIME TRACKER DATA is now in time-tracker-data.js
+// ⏰ TIME TRACKER DATA is now in content/time-tracker-data.js
 
 // ================================================
 // 🚀 INITIALIZATION
@@ -270,12 +196,6 @@ function setupEnvCategoryClicks() {
                 case 'economics':
                     switchLeftWorkspace('economics');
                     break;
-                case 'leadership':
-                    switchLeftWorkspace('leadership');
-                    break;
-                case 'dog-grooming':
-                    switchLeftWorkspace('dog');
-                    break;
             }
         });
     });
@@ -312,9 +232,7 @@ function switchLeftWorkspace(mode) {
 
 function getWorkspaceHTML(mode) {
     const workspaceMap = {
-        'economics': WORKSPACE_CONTENT.economics,
-        'leadership': WORKSPACE_CONTENT.leadership,
-        'dog': WORKSPACE_CONTENT.dogGrooming
+        'economics': ECONOMICS_WORKSPACE
     };
     
     const config = workspaceMap[mode];
@@ -426,13 +344,6 @@ function ensureConsoleCursor() {
     consoleOutput.appendChild(cursorLine);
     
     consoleOutput.scrollTop = consoleOutput.scrollHeight;
-}
-
-function scrollConsoleToBottom() {
-    const consoleOutput = document.querySelector('.console-output');
-    if (consoleOutput) {
-        consoleOutput.scrollTop = consoleOutput.scrollHeight;
-    }
 }
 
 function setupConsoleSimulation() {
@@ -694,8 +605,16 @@ function simulateCodeExecution() {
     const existingCursors = consoleOutput.querySelectorAll('.cursor');
     existingCursors.forEach(cursor => cursor.parentElement.remove());
     
-    // Display execution messages
+    // Display execution messages with custom delays for dramatic effect
+    const delays = [
+        0,      // '> Connecting to barn WiFi...' - immediate
+        1200,   // 'Error: Cow stepped on router...' - pause before error
+        2400,   // 'Connection established!' - pause after error before success
+    ];
+    
+    let cumulativeDelay = 0;
     CONSOLE_MESSAGES.execution.forEach((message, index) => {
+        cumulativeDelay += delays[index] || 800; // Default 800ms if not specified
         const messageTimeout = setTimeout(() => {
             if (!isExecutionSequenceActive) return; // Check if cancelled
             addConsoleCommand(message);
@@ -705,7 +624,7 @@ function simulateCodeExecution() {
                 }, 500);
                 executionTimeouts.push(cursorTimeout);
             }
-        }, index * 500);
+        }, cumulativeDelay);
         executionTimeouts.push(messageTimeout);
     });
 }
@@ -1274,6 +1193,61 @@ function initTimeTracker() {
     });
 }
 
+// Track if lifetime tracker has been initialized
+let lifetimeTrackerInitialized = false;
+
+function initLifetimeTracker() {
+    // Prevent re-initialization if already done
+    if (lifetimeTrackerInitialized || !LIFETIME_TRACKER_CONFIG) return;
+    
+    const container = document.getElementById('lifetime-thermometer-container');
+    const startDateSpan = document.getElementById('lifetime-start-date');
+    const lastUpdatedSpan = document.getElementById('lifetime-last-updated');
+    const totalHoursSpan = document.getElementById('lifetime-total-hours-display');
+    
+    if (!container) return;
+    
+    lifetimeTrackerInitialized = true;
+    
+    // Set data-count attribute for CSS responsive behavior
+    container.setAttribute('data-count', LIFETIME_TRACKER_CONFIG.activities.length);
+    
+    // Update dates
+    if (startDateSpan) {
+        startDateSpan.textContent = LIFETIME_TRACKER_CONFIG.beginDate;
+    }
+    if (lastUpdatedSpan) {
+        lastUpdatedSpan.textContent = LIFETIME_TRACKER_CONFIG.lastUpdated;
+    }
+    
+    // Calculate and display total hours
+    const totalHours = LIFETIME_TRACKER_CONFIG.activities.reduce((sum, activity) => sum + activity.hours, 0);
+    if (totalHoursSpan) {
+        totalHoursSpan.textContent = totalHours.toFixed(1);
+    }
+    
+    // Create thermometer bars
+    container.innerHTML = '';
+    const maxHours = LIFETIME_TRACKER_CONFIG.maxHours;
+    
+    LIFETIME_TRACKER_CONFIG.activities.forEach(activity => {
+        const thermometer = document.createElement('div');
+        thermometer.className = 'thermometer';
+        
+        const fillPercentage = (activity.hours / maxHours) * 100;
+        
+        thermometer.innerHTML = `
+            <div class="thermometer-name">${activity.name}</div>
+            <div class="thermometer-tube">
+                <div class="thermometer-fill" style="height: ${fillPercentage}%; background: ${activity.color}"></div>
+            </div>
+            <div class="thermometer-hours">${activity.hours}h</div>
+        `;
+        
+        container.appendChild(thermometer);
+    });
+}
+
 // ================================================
 // 📊 PLOTS TAB SWITCHING
 // ================================================
@@ -1284,6 +1258,7 @@ function setupPlotsTabSwitching() {
     const plotsTabs = document.querySelectorAll('.plots-tabs .tab[data-plot-tab]');
     const contentPanes = {
         'this-week': document.getElementById('this-week-content'),
+        'lifetime': document.getElementById('lifetime-content'),
         'plots': document.getElementById('plots-content')
     };
     
@@ -1310,15 +1285,11 @@ function setupPlotsTabSwitching() {
                 chartInitialized = true;
                 initializeChart();
             }
+            
+            // Initialize lifetime tracker when Lifetime tab is first clicked
+            if (tabId === 'lifetime') {
+                initLifetimeTracker();
+            }
         });
     });
 }
-
-// ================================================
-// 🎉 READY!
-// ================================================
-
-console.log('🐄 RStudio Dashboard Loaded! Try clicking on objects in the Environment pane or running code!');
-console.log('🎮 New: Play "Feed a Cow" in the top-left pane!');
-console.log('🖼️ New: Check out the Cow Gallery to see all the cows Isaac has met!');
-console.log('⏰ New: Track your weekly hours in the "This Week" tab!');
