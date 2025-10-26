@@ -15,7 +15,7 @@
 
 const TIME_TRACKER_CONFIG = {
     weekOf: "Oct 20-26, 2025",
-    lastUpdated: "10:58 PM, October 24, 2025",
+    lastUpdated: "11:02 PM,Oct 25, 2025",
     maxHours: 35, // Maximum hours for the tallest bar (round up from 31.33)
     activities: [
         { 
@@ -25,7 +25,7 @@ const TIME_TRACKER_CONFIG = {
         },
         { 
             name: "Leadership", 
-            hours: 5.23, 
+            hours: 11.07, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
@@ -34,18 +34,23 @@ const TIME_TRACKER_CONFIG = {
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
+            name: "Computer Science", 
+            hours: 1.6, 
+            color: "#3a9d9d" // Bright teal/terminal cyan - technology, code, digital innovation
+        },
+        { 
             name: "Animal Welfare", 
             hours: 1.32, 
             color: "#5d8a5d" // Vibrant forest green - nature, earth, conservation
         },
         { 
             name: "Mathematics", 
-            hours: 1.18, 
+            hours: 1.28, 
             color: "#6e87a8" // Cool slate blue - logic, precision, geometric elegance
         },
         { 
             name: "Greek", 
-            hours: 0.2, 
+            hours: 0.22, 
             color: "#b07652" // Warm terracotta/burnt sienna - ancient pottery, classical scrolls, aged clay
         },
         { 
