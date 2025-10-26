@@ -1,22 +1,19 @@
-// ⏰ TIME TRACKER DATA
-
-// Previous week colors (Oct 13-19, 2025):
-// Computer Science: #3a9d9d (Bright teal/terminal cyan)
-// Greek: #b07652 (Warm terracotta/burnt sienna)
-// Pedagogy: #8ba68c (Soft sage)
-
-// Current week colors (Oct 20-26, 2025):
-// Economics: #c99a4d (Bright amber/old gold) - carried over
-// Pedagogy: #8ba68c (Soft sage) - carried over  
-// Animal Welfare: #5d8a5d (Vibrant forest green) - carried over
-// Computer Science: #3a9d9d (Bright teal/terminal cyan) - carried over
-// Mathematics: #6e87a8 (Cool slate blue) - carried over
-// Greek: #b07652 (Warm terracotta/burnt sienna) - carried over
+// ================================================
+// ⏰ THIS WEEK TIME TRACKER DATA
+// ================================================
+// Color Reference:
+// - Economics: #c99a4d (Bright amber/old gold)
+// - Pedagogy: #8ba68c (Soft sage)
+// - Animal Welfare: #5d8a5d (Vibrant forest green)
+// - Computer Science: #3a9d9d (Bright teal/terminal cyan)
+// - Mathematics: #6e87a8 (Cool slate blue)
+// - Greek: #b07652 (Warm terracotta/burnt sienna)
+// ================================================
 
 const TIME_TRACKER_CONFIG = {
     weekOf: "Oct 20-26, 2025",
     lastUpdated: "11:02 PM,Oct 25, 2025",
-    maxHours: 35, // Maximum hours for the tallest bar (round up from 31.33)
+    maxHours: 35, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
             name: "Economics", 

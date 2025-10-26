@@ -1,14 +1,19 @@
 // ================================================
-// RStudio Dashboard Interactive Features
+// RSTUDIO DASHBOARD - INTERACTIVE FEATURES
+// ================================================
+// Main JavaScript file for Isaac Qi's Research Dashboard
+// Handles all interactions, animations, and dynamic content
 // ================================================
 
 // ================================================
-// 📝 CONTENT CONFIGURATION - EDIT THESE SECTIONS
+// 📝 CONTENT CONFIGURATION
 // ================================================
 
-// 🐄 COW GALLERY DATA is now in cow-gallery/cow-data.js
+// 🐄 Cow Gallery Data → cow-gallery/cow-data.js
+// ⏰ Time Tracker Data → content/time-tracker/
+// 🏢 Workspace Content → content/main-tabs/
 
-// 🔬 RESEARCH CHART DATA - Customize your chart
+// 🔬 Research Chart Configuration
 const CHART_CONFIG = {
     title: 'AMS Visit Intervals: Control vs PRT',
     weeks: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
@@ -18,7 +23,7 @@ const CHART_CONFIG = {
     xAxisTitle: 'Week(s) After AMS Transition'
 };
 
-// 💬 CONSOLE MESSAGES - Edit welcome messages
+// 💬 Console Messages
 const CONSOLE_MESSAGES = {
     welcome: [
         '> Hello.',
@@ -31,7 +36,7 @@ const CONSOLE_MESSAGES = {
     ]
 };
 
-// 📋 OBJECT DETAILS - Environment pane object descriptions
+// 📋 Object Details (Environment pane)
 const OBJECT_DETAILS = {
     'mission': `chr "Making dairy cow lives incrementally better over time"<br><br>
 This represents my core motivation and the driving force behind my research. 
@@ -39,21 +44,18 @@ Every study, every analysis, every day spent in the field is guided by this
 simple goal: improving the welfare and quality of life for dairy cattle.`,
     'field_of_study': `chr "Master of Food and Resource Economics at the University of British Columbia"`,
     'current_status': `chr "At the first Vancouver community Cursor Workshop!"`,
+    'cv': 'content/CV/Isaac_Qi_CV.pdf', // Special case: opens PDF in new tab
     'Animal Welfare': `Switching to Animal Welfare...`,
     'Economics': `Switching to Economics...`
 };
 
-// 🏢 WORKSPACE CONTENT is now in separate files:
-// - content/animal-welfare.js
-// - content/economics.js
-
-// 📞 CONTACT INFO - Update your contact details
+// 📞 Contact Information
 const CONTACT_INFO = {
     linkedin: "https://www.linkedin.com/in/isaacqi",
     email: "isaac.qi@ubc.ca"
 };
 
-// 🎮 GAME SETTINGS - Adjust game difficulty
+// 🎮 Game Configuration
 const GAME_CONFIG = {
     timeLimit: 30,
     cowSpeed: 2000,      // milliseconds between cow appearances
@@ -61,17 +63,16 @@ const GAME_CONFIG = {
     pointsPerCow: 10
 };
 
-// ⏰ TIME TRACKER DATA is now in content/time-tracker-data.js
-
 // ================================================
 // 🚀 INITIALIZATION
+// ================================================
+// Runs when page loads - sets up all interactive features
 // ================================================
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Starting dashboard initialization...');
     try {
         setupMobileWarning();
-    // initializeChart(); // Moved to lazy loading in setupPlotsTabSwitching
     setupTabSwitching();
     setupObjectInteractions();
     setupConsoleSimulation();
@@ -92,6 +93,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ================================================
 // 🎨 ENVIRONMENT TABS & WORKSPACE SWITCHING
+// ================================================
+// Handles switching between different workspaces
+// (Animal Welfare, Economics, etc.)
 // ================================================
 
 let originalTopPaneHTML = null;
@@ -269,8 +273,10 @@ function getWorkspaceHTML(mode) {
 // ================================================
 // 💬 CONSOLE FUNCTIONALITY
 // ================================================
+// Simulates R console output with animations
+// ================================================
 
-// Track ongoing console animations to prevent conflicts
+// Track console animation state
 let welcomeTimeouts = [];
 let executionTimeouts = [];
 let isWelcomeSequenceActive = false;
@@ -391,6 +397,8 @@ function addConsoleCommand(command) {
 // ================================================
 // 📊 CHART INITIALIZATION
 // ================================================
+// Creates research visualization chart using Chart.js
+// ================================================
 
 function initializeChart() {
     const ctx = document.getElementById('cowBehaviorChart');
@@ -468,6 +476,9 @@ function initializeChart() {
 // ================================================
 // 🔄 TAB SWITCHING
 // ================================================
+// Handles switching between tabs in left pane
+// (Cow Gallery, Feed a Cow game, etc.)
+// ================================================
 
 function setupTabSwitching() {
     const tabs = document.querySelectorAll('.left-column .tab[data-tab]');
@@ -526,6 +537,8 @@ function hideElements(elements) {
 // ================================================
 // 🔍 OBJECT INTERACTIONS
 // ================================================
+// Click handlers for Environment pane objects
+// ================================================
 
 function setupObjectInteractions() {
     const objectItems = document.querySelectorAll('.object-item');
@@ -549,6 +562,20 @@ function showObjectDetails(objectName) {
     const consoleOutput = document.querySelector('.console-output');
     if (!consoleOutput) return;
     
+    // Special case: CV opens PDF in new tab
+    if (objectName === 'cv') {
+        const pdfPath = OBJECT_DETAILS[objectName];
+        window.open(pdfPath, '_blank');
+        
+        // Show console message
+        const newLine = document.createElement('div');
+        newLine.className = 'console-line';
+        newLine.innerHTML = `> Opening CV in new tab...`;
+        consoleOutput.appendChild(newLine);
+        ensureConsoleCursor();
+        return;
+    }
+    
     const details = OBJECT_DETAILS[objectName] || `Object '${objectName}' not found`;
     
     // Add command line
@@ -570,6 +597,8 @@ function showObjectDetails(objectName) {
 
 // ================================================
 // ▶️ RUN BUTTON & CODE EXECUTION
+// ================================================
+// Simulates code execution with fun console output
 // ================================================
 
 function setupRunButton() {
@@ -605,7 +634,7 @@ function simulateCodeExecution() {
     const existingCursors = consoleOutput.querySelectorAll('.cursor');
     existingCursors.forEach(cursor => cursor.parentElement.remove());
     
-    // Display execution messages with custom delays for dramatic effect
+    // Display messages with custom delays for dramatic effect
     const delays = [
         0,      // '> Connecting to barn WiFi...' - immediate
         1200,   // 'Error: Cow stepped on router...' - pause before error
@@ -631,6 +660,8 @@ function simulateCodeExecution() {
 
 // ================================================
 // 🎮 FEED A COW GAME
+// ================================================
+// Interactive whack-a-mole style game with cows
 // ================================================
 
 function initFeedACowGame() {
@@ -792,13 +823,15 @@ function initFeedACowGame() {
 // ================================================
 // 🖼️ COW GALLERY
 // ================================================
+// Image carousel showing cows Isaac has met
+// ================================================
 
-// Global cow gallery state to preserve across workspace switches
+// Gallery state preserved across workspace switches
 let globalCowIndex = 0;
 let cowGalleryElements = null;
 let cowGalleryInitialized = false;
 
-// Global navigation functions
+// Navigation functions
 function prevCow() {
     if (!cowGalleryElements) return;
     if (globalCowIndex > 0) {
@@ -963,6 +996,8 @@ function initCowGallery() {
 // ================================================
 // 📱 MOBILE WARNING
 // ================================================
+// Shows warning on mobile devices
+// ================================================
 
 function setupMobileWarning() {
     const mobileWarning = document.getElementById('mobile-warning');
@@ -993,6 +1028,8 @@ function setupMobileWarning() {
 // ================================================
 // ⌨️ KEYBOARD SHORTCUTS & INTERACTIONS
 // ================================================
+// Hover effects and keyboard shortcuts
+// ================================================
 
 function setupLightweightAffordances() {
     // Code line hover effects
@@ -1016,7 +1053,7 @@ function setupLightweightAffordances() {
     });
 }
 
-// Keyboard shortcuts
+// Global keyboard shortcuts
 document.addEventListener('keydown', function(e) {
     if (e.ctrlKey || e.metaKey) {
         switch(e.key) {
@@ -1055,6 +1092,8 @@ function showNotification(message) {
 
 // ================================================
 // ✏️ CODE EDITING FUNCTIONALITY
+// ================================================
+// Handles editable code areas (currently unused)
 // ================================================
 
 function setupCodeEditing() {
@@ -1120,7 +1159,9 @@ function setupCodeEditing() {
 }
 
 // ================================================
-// 🎨 STYLES & ANIMATIONS
+// 🎨 DYNAMIC STYLES & ANIMATIONS
+// ================================================
+// Injects additional styles into page
 // ================================================
 
 const style = document.createElement('style');
@@ -1144,6 +1185,8 @@ document.head.appendChild(style);
 
 // ================================================
 // ⏰ TIME TRACKER FUNCTIONALITY
+// ================================================
+// Renders "This Week" time tracking thermometers
 // ================================================
 
 function initTimeTracker() {
@@ -1193,11 +1236,11 @@ function initTimeTracker() {
     });
 }
 
-// Track if lifetime tracker has been initialized
+// ⏰ Lifetime Tracker (lazy-loaded on tab click)
 let lifetimeTrackerInitialized = false;
 
 function initLifetimeTracker() {
-    // Prevent re-initialization if already done
+    // Prevent re-initialization
     if (lifetimeTrackerInitialized || !LIFETIME_TRACKER_CONFIG) return;
     
     const container = document.getElementById('lifetime-thermometer-container');
@@ -1251,8 +1294,10 @@ function initLifetimeTracker() {
 // ================================================
 // 📊 PLOTS TAB SWITCHING
 // ================================================
+// Switches between This Week, Lifetime, and Plots tabs
+// ================================================
 
-let chartInitialized = false; // Track if chart has been initialized
+let chartInitialized = false; // Track chart initialization
 
 function setupPlotsTabSwitching() {
     const plotsTabs = document.querySelectorAll('.plots-tabs .tab[data-plot-tab]');
@@ -1280,13 +1325,13 @@ function setupPlotsTabSwitching() {
                 }
             });
             
-            // Lazy load chart when Plots tab is first clicked
+            // Lazy-load chart on first Plots tab click
             if (tabId === 'plots' && !chartInitialized) {
                 chartInitialized = true;
                 initializeChart();
             }
             
-            // Initialize lifetime tracker when Lifetime tab is first clicked
+            // Initialize lifetime tracker on Lifetime tab click
             if (tabId === 'lifetime') {
                 initLifetimeTracker();
             }

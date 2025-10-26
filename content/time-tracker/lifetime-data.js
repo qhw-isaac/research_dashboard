@@ -1,10 +1,13 @@
+// ================================================
 // ⏰ LIFETIME TIME TRACKER DATA
-// Total hours tracked since January 1, 2025
+// ================================================
+// Total cumulative hours tracked since January 1, 2025
+// ================================================
 
 const LIFETIME_TRACKER_CONFIG = {
     beginDate: "January 1, 2025",
     lastUpdated: "Oct 25, 2025",
-    maxHours: 650, // Maximum hours for the tallest bar (round up from 596.95)
+    maxHours: 650, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
             name: "Economics", 

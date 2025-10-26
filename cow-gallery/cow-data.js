@@ -1,4 +1,9 @@
-// 🐄 COW GALLERY DATA - Add/edit your cows here
+// ================================================
+// 🐄 COW GALLERY DATA
+// ================================================
+// Each cow needs: name, breed, location, date, image, and story
+// ================================================
+
 const COW_DATA = [
     {
         name: "3034",

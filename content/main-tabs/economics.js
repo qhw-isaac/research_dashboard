@@ -1,4 +1,9 @@
+// ================================================
 // 💰 ECONOMICS WORKSPACE
+// ================================================
+// Workspace for economics research and content
+// Add tabs and content as needed
+// ================================================
 
 const ECONOMICS_WORKSPACE = {
     title: "Work in Progress...",
