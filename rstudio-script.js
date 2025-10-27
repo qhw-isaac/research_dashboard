@@ -44,7 +44,7 @@ Every study, every analysis, every day spent in the field is guided by this
 simple goal: improving the welfare and quality of life for dairy cattle.`,
     'field_of_study': `chr "Master of Food and Resource Economics at the University of British Columbia"`,
     'current_status': `chr "At the first Vancouver community Cursor Workshop!"`,
-    'cv': 'content/CV/Isaac_Qi_CV.pdf', // Special case: opens PDF in new tab
+    'cv': 'content/CV/Redacted_CV.pdf', // Special case: opens PDF in new tab
     'Animal Welfare': `Switching to Animal Welfare...`,
     'Economics': `Switching to Economics...`
 };
