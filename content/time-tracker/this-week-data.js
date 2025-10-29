@@ -17,22 +17,22 @@ const TIME_TRACKER_CONFIG = {
     activities: [
         { 
             name: "Economics", 
-            hours: 6.7, 
+            hours: 8, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 
             name: "Leadership", 
-            hours: 3.0, 
+            hours: 3, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
             name: "Pedagogy", 
-            hours: 3.3, 
+            hours: 5.7, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
             name: "Animal Welfare", 
-            hours: 3.0, 
+            hours: 4.3, 
             color: "#5d8a5d" // Vibrant forest green - nature, earth, conservation
         },
         { 

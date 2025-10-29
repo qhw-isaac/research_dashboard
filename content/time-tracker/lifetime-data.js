@@ -11,22 +11,22 @@ const LIFETIME_TRACKER_CONFIG = {
     activities: [
         { 
             name: "Economics", 
-            hours: 602.25, 
+            hours: 603.5, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 
             name: "Animal Welfare", 
-            hours: 256.18, 
+            hours: 257.5, 
             color: "#5d8a5d" // Vibrant forest green - nature, earth, conservation
         },
         { 
             name: "Leadership", 
-            hours: 192.43, 
+            hours: 192.4, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
             name: "Mathematics", 
-            hours: 149.15, 
+            hours: 149.2, 
             color: "#6e87a8" // Cool slate blue - logic, precision, geometric elegance
         },
         { 
@@ -36,7 +36,7 @@ const LIFETIME_TRACKER_CONFIG = {
         },
         { 
             name: "Pedagogy", 
-            hours: 95.63, 
+            hours: 98.1, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         }
     ]
