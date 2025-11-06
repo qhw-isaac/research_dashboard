@@ -35,6 +35,11 @@ const LIFETIME_TRACKER_CONFIG = {
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
+            name: "Computer Science", 
+            hours: 14.87, 
+            color: "#3a9d9d" // Bright teal/terminal cyan
+        },
+        { 
             name: "French", 
             hours: 4.22, 
             color: "#b07652" // Warm terracotta/burnt sienna - ancient pottery, classical scrolls, aged clay

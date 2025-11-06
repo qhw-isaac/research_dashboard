@@ -7,12 +7,13 @@
 // - Leadership: #8ba68c (Soft sage)
 // - Mathematics: #6e87a8 (Cool slate blue)
 // - Pedagogy: #8ba68c (Soft sage)
+// - Computer Science: #3a9d9d (Bright teal/terminal cyan)
 // - French: #b07652 (Warm terracotta/burnt sienna)
 // ================================================
 
 const TIME_TRACKER_CONFIG = {
     weekOf: "Nov 2 - 8, 2025",
-    lastUpdated: "12:40 PM, Nov 6, 2025",
+    lastUpdated: "12:45 PM, Nov 6, 2025",
     maxHours: 21, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
@@ -39,6 +40,11 @@ const TIME_TRACKER_CONFIG = {
             name: "Leadership", 
             hours: 0.5, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
+        },
+        { 
+            name: "Computer Science", 
+            hours: 0.15, 
+            color: "#3a9d9d" // Bright teal/terminal cyan
         },
         { 
             name: "French", 
