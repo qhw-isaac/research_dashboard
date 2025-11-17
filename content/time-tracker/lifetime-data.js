@@ -11,7 +11,7 @@ const LIFETIME_TRACKER_CONFIG = {
     activities: [
         { 
             name: "Economics", 
-            hours: 691.58, 
+            hours: 692.7, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 

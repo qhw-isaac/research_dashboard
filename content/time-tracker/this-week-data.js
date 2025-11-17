@@ -12,13 +12,13 @@
 // ================================================
 
 const TIME_TRACKER_CONFIG = {
-    weekOf: "Nov 16 - 22, 2025",
-    lastUpdated: "6:25 PM, Nov 16, 2025",
-    maxHours: 34, // Maximum hours for tallest bar (round up from actual max)
+    weekOf: "Nov 10 - 16, 2025",
+    lastUpdated: "7:36 PM, Nov 16, 2025",
+    maxHours: 35, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
             name: "Economics", 
-            hours: 33.65, 
+            hours: 34.77, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 

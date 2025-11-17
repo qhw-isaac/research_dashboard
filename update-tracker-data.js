@@ -83,12 +83,14 @@ function getCurrentDate() {
 // Get current week range
 function getCurrentWeekRange() {
     const now = new Date();
-    const dayOfWeek = now.getDay(); // 0 = Sunday
+    const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
     const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - dayOfWeek); // Go to Sunday
+    // Adjust so Monday = 0, Tuesday = 1, ..., Sunday = 6
+    const daysFromMonday = (dayOfWeek + 6) % 7; // Sunday becomes 6, Monday becomes 0
+    startOfWeek.setDate(now.getDate() - daysFromMonday); // Go to Monday
     
     const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // Saturday
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday (6 days after Monday)
     
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     
