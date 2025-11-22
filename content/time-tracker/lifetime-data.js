@@ -6,7 +6,7 @@
 
 const LIFETIME_TRACKER_CONFIG = {
     beginDate: "January 1, 2025",
-    lastUpdated: "Nov 19, 2025",
+    lastUpdated: "Nov 22, 2025",
     maxHours: 750, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
