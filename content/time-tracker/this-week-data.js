@@ -13,7 +13,7 @@
 
 const TIME_TRACKER_CONFIG = {
     weekOf: "Nov 24 - 30, 2025",
-    lastUpdated: "10:16 AM, Nov 25, 2025",
+    lastUpdated: "5:06 PM, Nov 27, 2025",
     maxHours: 11, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
