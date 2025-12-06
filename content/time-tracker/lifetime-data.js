@@ -15,6 +15,11 @@ const LIFETIME_TRACKER_CONFIG = {
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 
+            name: "Animal Welfare", 
+            hours: 286.97, 
+            color: "#5d8a5d" // Vibrant forest green - nature, earth, conservation
+        },
+        { 
             name: "Leadership", 
             hours: 227.33, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
@@ -28,6 +33,16 @@ const LIFETIME_TRACKER_CONFIG = {
             name: "Pedagogy", 
             hours: 136.37, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
+        },
+        { 
+            name: "Philosophy", 
+            hours: 110.17, 
+            color: "#8b5ba8" // Deep purple - wisdom, contemplation, ancient scrolls
+        },
+        { 
+            name: "Computer Science", 
+            hours: 14.97, 
+            color: "#3a9d9d" // Bright teal/terminal cyan
         },
         { 
             name: "French", 
