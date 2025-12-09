@@ -6,12 +6,12 @@
 
 const LIFETIME_TRACKER_CONFIG = {
     beginDate: "January 1, 2025",
-    lastUpdated: "Dec 6, 2025",
+    lastUpdated: "Dec 9, 2025",
     maxHours: 850, // Maximum hours for tallest bar (round up from actual max)
     activities: [
         { 
             name: "Economics", 
-            hours: 803.95, 
+            hours: 820.45, 
             color: "#c99a4d" // Bright amber/old gold - wealth, old money, leather-bound ledgers
         },
         { 
@@ -26,12 +26,12 @@ const LIFETIME_TRACKER_CONFIG = {
         },
         { 
             name: "Mathematics", 
-            hours: 152.87, 
+            hours: 153.08, 
             color: "#6e87a8" // Cool slate blue - logic, precision, geometric elegance
         },
         { 
             name: "Pedagogy", 
-            hours: 136.37, 
+            hours: 148.37, 
             color: "#8ba68c" // Soft sage - chalkboards, teaching halls, worn textbooks
         },
         { 
@@ -41,12 +41,12 @@ const LIFETIME_TRACKER_CONFIG = {
         },
         { 
             name: "Computer Science", 
-            hours: 14.97, 
+            hours: 15.08, 
             color: "#3a9d9d" // Bright teal/terminal cyan
         },
         { 
             name: "French", 
-            hours: 4.92, 
+            hours: 5, 
             color: "#b07652" // Warm terracotta/burnt sienna - ancient pottery, classical scrolls, aged clay
         }
     ]
