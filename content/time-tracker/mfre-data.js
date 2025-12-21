@@ -28,6 +28,11 @@ const MFRE_TRACKER_CONFIG = {
             name: "FRE 528", 
             hours: 138.02, 
             color: "#6e87a8" // Slate blue
+        },
+        { 
+            name: "FRE 520", 
+            hours: 24.53, 
+            color: "#b07652" // Yellow
         }
     ]
 };
