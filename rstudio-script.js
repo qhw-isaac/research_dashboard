@@ -250,14 +250,19 @@ function getWorkspaceHTML(mode) {
 
     const contentHTML = config.tabs.map(tab => {
         const display = config.tabs[0].id === tab.id ? 'flex' : 'none';
-        const content = tab.content || `
+        let content = tab.content || `
             <div style="text-align:center;max-width:520px;color:#d4d4d4;">
                 <h3 style="color:#ffffff;margin-bottom:10px;">${config.title}</h3>
                 <p>${config.description}</p>
             </div>`;
         
-        return `<div id="${tab.id}" class="code-editor" style="display:${display};align-items:center;justify-content:center;">
-            ${tab.content ? `<div class="code-content">${content}</div>` : content}
+        // If content is a function, call it to get the actual content
+        if (typeof content === 'function') {
+            content = content();
+        }
+        
+        return `<div id="${tab.id}" class="code-editor" style="display:${display};align-items:center;justify-content:center;overflow-y:auto;">
+            <div class="code-content" style="width:100%;max-height:100%;">${content}</div>
         </div>`;
     }).join('');
 
@@ -1291,6 +1296,61 @@ function initLifetimeTracker() {
     });
 }
 
+// ⏰ MFRE Tracker (lazy-loaded on tab click)
+let mfreTrackerInitialized = false;
+
+function initMFRETracker() {
+    // Prevent re-initialization
+    if (mfreTrackerInitialized || !MFRE_TRACKER_CONFIG) return;
+    
+    const container = document.getElementById('mfre-thermometer-container');
+    const semesterNameSpan = document.getElementById('mfre-semester-name');
+    const lastUpdatedSpan = document.getElementById('mfre-last-updated');
+    const totalHoursSpan = document.getElementById('mfre-total-hours-display');
+    
+    if (!container) return;
+    
+    mfreTrackerInitialized = true;
+    
+    // Set data-count attribute for CSS responsive behavior
+    container.setAttribute('data-count', MFRE_TRACKER_CONFIG.courses.length);
+    
+    // Update semester info
+    if (semesterNameSpan) {
+        semesterNameSpan.textContent = MFRE_TRACKER_CONFIG.semesterName;
+    }
+    if (lastUpdatedSpan) {
+        lastUpdatedSpan.textContent = MFRE_TRACKER_CONFIG.lastUpdated;
+    }
+    
+    // Calculate and display total hours
+    const totalHours = MFRE_TRACKER_CONFIG.courses.reduce((sum, course) => sum + course.hours, 0);
+    if (totalHoursSpan) {
+        totalHoursSpan.textContent = totalHours.toFixed(1);
+    }
+    
+    // Create thermometer bars
+    container.innerHTML = '';
+    const maxHours = MFRE_TRACKER_CONFIG.maxHours;
+    
+    MFRE_TRACKER_CONFIG.courses.forEach(course => {
+        const thermometer = document.createElement('div');
+        thermometer.className = 'thermometer';
+        
+        const fillPercentage = (course.hours / maxHours) * 100;
+        
+        thermometer.innerHTML = `
+            <div class="thermometer-name">${course.name}</div>
+            <div class="thermometer-tube">
+                <div class="thermometer-fill" style="height: ${fillPercentage}%; background: ${course.color}"></div>
+            </div>
+            <div class="thermometer-hours">${course.hours}h</div>
+        `;
+        
+        container.appendChild(thermometer);
+    });
+}
+
 // ================================================
 // 📊 PLOTS TAB SWITCHING
 // ================================================
@@ -1304,6 +1364,8 @@ function setupPlotsTabSwitching() {
     const contentPanes = {
         'this-week': document.getElementById('this-week-content'),
         'lifetime': document.getElementById('lifetime-content'),
+        'mfre': document.getElementById('mfre-content'),
+        'MFRE': document.getElementById('mfre-content'),
         'plots': document.getElementById('plots-content')
     };
     
@@ -1334,6 +1396,11 @@ function setupPlotsTabSwitching() {
             // Initialize lifetime tracker on Lifetime tab click
             if (tabId === 'lifetime') {
                 initLifetimeTracker();
+            }
+            
+            // Initialize MFRE tracker on MFRE tab click
+            if (tabId === 'mfre' || tabId === 'MFRE') {
+                initMFRETracker();
             }
         });
     });

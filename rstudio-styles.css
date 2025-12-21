@@ -1037,7 +1037,8 @@ body {
 
 .plots-content,
 .this-week-content,
-.lifetime-content {
+.lifetime-content,
+.mfre-content {
     height: 100%;
     width: 100%;
     display: flex;
@@ -1047,7 +1048,8 @@ body {
 
 /* Time Tracker Styles - Modern Dark Design */
 .this-week-content,
-.lifetime-content {
+.lifetime-content,
+.mfre-content {
     padding: 15px;
     background: #1e1e1e;
     border-radius: 8px;

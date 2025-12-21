@@ -14,6 +14,12 @@ const ECONOMICS_WORKSPACE = {
             icon: "fas fa-chart-line", 
             name: "Economics", 
             content: "" 
+        },
+        { 
+            id: "gravity-model", 
+            icon: "fas fa-globe", 
+            name: "Gravity Model", 
+            content: () => GRAVITY_MODEL_CONTENT
         }
     ]
 };
